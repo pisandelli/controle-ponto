@@ -1,6 +1,4 @@
 import { fileURLToPath } from 'node:url'
-import { resolve, dirname } from 'node:path'
-import VueI18nVitePlugin from '@intlify/unplugin-vue-i18n/vite'
 
 export default defineNuxtConfig({
   app: {
@@ -8,7 +6,7 @@ export default defineNuxtConfig({
       htmlAttrs: {
         lang: 'pt-br'
       },
-      title: 'Nuxt 3 Scaffolding'
+      title: 'Controle de Ponto'
     }
   },
   // Read more about Nuxt Layers
@@ -25,7 +23,8 @@ export default defineNuxtConfig({
   },
   alias: {
     images: fileURLToPath(new URL('./assets/images', import.meta.url)),
-    styles: fileURLToPath(new URL('./assets/styles', import.meta.url))
+    styles: fileURLToPath(new URL('./assets/styles', import.meta.url)),
+    utilities: fileURLToPath(new URL('./assets/styles/utilities', import.meta.url))
   },
 
   // Enabled Take Over Mode or installed the TypeScript Vue Plugin (Volar)
@@ -45,19 +44,14 @@ export default defineNuxtConfig({
           ]
         }
       }
-    },
-    /**
-     * @see https://vue-i18n.intlify.dev/guide/integrations/nuxt3.html
-     * */
-    plugins: [
-      VueI18nVitePlugin({
-        include: [
-          resolve(dirname(fileURLToPath(import.meta.url)), './locales/*.json')
-        ]
-      })
-    ]
+    }
   },
   modules: [
+    ['@ant-design-vue/nuxt', {
+      // Add options for Ant Design Vue
+      // https://nuxt.com/modules/ant-design-vue#options
+      extractStyle: true
+    }],
     ['@nuxtjs/google-fonts', {
       // Add options for Google Fonts
       // https://google-fonts.nuxtjs.org/options
@@ -88,10 +82,6 @@ export default defineNuxtConfig({
       // Control the site color Mode
       // https://color-mode.nuxtjs.org/
     }],
-    ['@nuxtjs/web-vitals', {
-      // Add custom config
-      // https://github.com/nuxt-modules/web-vitals#options
-    }],
     ['nuxt-icon', {
       // Add custom options for NuxtIcon
       // https://github.com/nuxt-modules/icon
@@ -100,6 +90,11 @@ export default defineNuxtConfig({
       // Add custom options for vueTransitions
       // https://github.com/MorevM/vue-transitions#usage-with-nuxt
     }],
-    '@pinia/nuxt'
+    ['@pinia/nuxt', {
+      autoImports: [
+        'defineStore',
+        'acceptHMRUpdate'
+      ]
+    }],
   ]
 })
