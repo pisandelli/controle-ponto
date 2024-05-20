@@ -13,6 +13,9 @@ BoxL.card
 
 <style lang="stylus" scoped>
 .card
-  border: 1px solid var(--card_border-color, #ccc )
-  border-radius: var(--border-radius, 0.5rem)
+  border-width: var(--card_border-thick, 0)
+  border-style: var(--card_border-style, none)
+  border-color: var(--card_border-color, unset)
+  border-radius: var(--card_border-radius, var(--border-radius, 0.5rem))
+  _box-shadow()
 </style>
