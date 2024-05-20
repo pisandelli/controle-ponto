@@ -15,10 +15,4 @@ centerL(intrinsic)
     p saida
 
 </template>
-<style lang='stylus' scoped>
-.container
-  --clusterl-gap: 0 
-.box
-  inline-size: 100px
-  aspect-ratio: 1 / 1
-</style>
+<style lang='stylus' scoped></style>
