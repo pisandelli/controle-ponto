@@ -1,3 +1,4 @@
+@require 'abstracts/mixins.styl'
 :root
   --animation-speed: 0.5s
   --border-radius: 0.5rem
@@ -39,15 +40,18 @@
   --border-medium: calc(var(--border-thin) * calc(var(--ratio) * 2))
   --border-thick: calc(var(--border-medium) * calc(var(--ratio) * 2.5))
 
-  --color-danger: #FF3B30
-  --color-default: #595959
-  --color-grey-dark: #8C8C8C
-  --color-grey-light: #f0f0f0
+  //COLOR PALETTE
+  _color-palette('primary', #0090ea)
+  _color-palette('secondary', #9c19a3)
+  _color-palette('accent', #e01b87)
+  _color-palette('success', #34C759)
+  _color-palette('warning', #FA8C16)
+  _color-palette('danger', #FF3B30)
+  _color-palette('info', #00a1d0)
+  _color-palette('gray', #999)
+
   --color-neutral: #fbfbfb
-  --color-primary: #597EF7
-  --color-secondary: #F7BD37
-  --color-success: #34C759
-  --color-warning: #FA8C16
+  --color-default: var(--color-gray)
 
   font-family: var(--font-plain)
   line-height: var(--ratio)
