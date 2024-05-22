@@ -10,7 +10,9 @@
 .topbar
   ClusterL.container(between)
     Logo.logo
-    Icon(name='feather:settings')
+    ClusterL
+      Icon.icon(name='feather:help-circle')
+      Icon.icon(name='feather:settings')
 
 </template>
 
@@ -24,4 +26,6 @@
   margin-inline: auto
   padding: var(--gap)
 
+.icon
+  color: var(--color-secondary)
 </style>
