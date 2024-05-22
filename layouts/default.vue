@@ -12,12 +12,22 @@ AConfigProvider(:theme='defaultTheme')
       WTopbar
     main
       slot
-    footer
-      p FOOTER
+    footer.footer
+      small Dúvida ou problemas, por favor avise a sua gestão
 </template>
 <style scoped>
 .layout {
   gap: 2.5rem 0;
   grid-template-rows: var(--topbar-height) auto min-content;
+
+  .footer {
+    text-align: center;
+    padding: .5rem var(--gap);
+
+    small {
+      font-size: .8rem
+    }
+
+  }
 }
 </style>
