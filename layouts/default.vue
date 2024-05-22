@@ -9,7 +9,7 @@
 AConfigProvider(:theme='defaultTheme')
   BasicLayout.layout
     header
-      p topbar
+      WTopbar
     main
       slot
     footer
