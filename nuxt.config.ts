@@ -17,7 +17,7 @@ export default defineNuxtConfig({
     'nuxt-layout-compositions'
   ],
   components: {
-    dirs: [
+    dirs: [{ path: '~/components/_widgets', pathPrefix: false, prefix: 'W' },
       '~/components'
     ]
   },
@@ -96,5 +96,11 @@ export default defineNuxtConfig({
         'acceptHMRUpdate'
       ]
     }],
+    ['dayjs-nuxt', {
+      // Add custom options for dayjs
+      // https://nuxt.com/modules/dayjs#configuration
+      locales: ['pt-br'],
+      defaultLocale: 'pt-br'
+    }]
   ]
 })
