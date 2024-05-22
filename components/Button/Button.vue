@@ -1,25 +1,44 @@
 <script lang='ts' setup>
 /**
 * Custom Buttons
-* @name 'CButton'
+* @name 'Button'
 * @version 1.0.0
 */
-const props = withDefaults(defineProps<{
+const props = defineProps<{
   icon?: string
-  tag?: 'button' | 'a'
-}>(), {
-  icon: '',
-  tag: 'button'
-})
+}>()
 </script>
 
 <template lang="pug">
-component(class='button' :is='props.tag')
+NuxtLink(class='button')
   Icon(v-if='props.icon' :name='props.icon' size='1.5em')
   slot
 </template>
 
 <style lang="stylus" scoped>
+$variants = primary accent success danger warning info
+.button
+  display: flex
+  gap: .8rem
+  font-size: .85rem
+  font-weight: var(--weight-medium)
+  background-color: var(--color-primary)
+  color: var(--color-neutral)
+  letter-spacing: 0.03125rem
+  padding: .5rem 1rem
+  border-radius: var(--border-radius)
+  text-decoration: none
+  border: 0
+  &:is(:hover, :focus)
+    filter: saturate(160%)
+  for $color in $variants
+    &[{$color}]
+      background-color unquote('var(--color-' + $color + ')')
+
+</style>
+
+
+<!-- <style lang="stylus" scoped>
 $variants = primary accent success danger warning info
 _variant($color)
   &[outline]
@@ -83,4 +102,4 @@ _variant($color)
     .icon
       margin-inline: .4rem 0
       order: 2
-</style>
+</style> -->

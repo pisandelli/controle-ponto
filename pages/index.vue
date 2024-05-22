@@ -13,7 +13,7 @@ CenterL(intrinsic)
     span.time {{ time }}
     .greetings
       h1.title Registre sua <span class='in'>entrada</span>
-  Button(success) Registrar entrada
+  Button(success to='#' icon='feather:check-circle') Registrar entrada
 
 </template>
 <style lang='stylus' scoped>
@@ -31,5 +31,5 @@ CenterL(intrinsic)
   font-weight: var(--weight-bold)
 
 .in
-  color: vaR(--color-success)
+  color: var(--color-success)
 </style>
