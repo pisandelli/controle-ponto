@@ -8,15 +8,33 @@ const time = useCurrentTime()
 </script>
 
 <template lang="pug">
-CenterL(intrinsic)
-  StackL
+CenterL
+  CenterL(intrinsic)
     span.time {{ time }}
-    .greetings
-      h1.title Registre sua <span class='in'>entrada</span>
-  Button(success to='#' icon='feather:check-circle') Registrar entrada
+    StackL.content
+      .greetings
+        h1.title Registre sua <span class='in'>entrada</span>
+
+      .input-group
+        label(for='obs') Observações
+        ATextarea(:rows='4' id='obs')
+
+      ClusterL(between)
+        Button(success to='#' icon='feather:log-in') Registrar entrada
+        Button(warning to='#' icon='feather:coffee') Registrar pausa
+        Button(danger to='#' icon='feather:log-out') Registrar saída
+
+    WLogTable.table
 
 </template>
 <style lang='stylus' scoped>
+.content 
+  inline-size: 100%
+  align-items: center
+
+label
+  font-weight: var(--weight-bold)
+
 .time
   font-size: 6rem
   font-weight: var(--weight-bold)
@@ -32,4 +50,9 @@ CenterL(intrinsic)
 
 .in
   color: var(--color-success)
+
+.input-group
+  inline-size: 100%
+.table
+  margin-block-start: 4rem
 </style>
