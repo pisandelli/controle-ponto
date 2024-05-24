@@ -1,27 +1,17 @@
 <script lang='ts' setup>
 /**
-* A small tabel to show
+* A small table to show
 * Day's log
 * @name 'WLogTable'
 * @version 1.0.0
 */
-import type { DayLog } from '~/Types/dayLog';
+import { useDayLogsStore } from '~/store/dayLogs';
+const dayLogStore = useDayLogsStore()
+const dataSource = computed(() => {
+  return !!dayLogStore.active ? [dayLogStore.log] : []
+})
+
 const today = useToday()
-const dataSource: DayLog[] = [
-  {
-    key: '1',
-    entrada: '08:05:20',
-    pausaInicio: '10:00:01',
-    pausaFim: '10:10:06',
-    saida: '12:20:45',
-    obs: {
-      entrada: '',
-      pausaInicio: 'Essa é uma observação do inicio da pausa Lorem Essa é uma observação do inicio da pausa Lorem Essa é uma observação do inicio da pausa Lorem',
-      pausaFim: '',
-      saida: 'Essa é uma observação da Saída'
-    }
-  }
-]
 
 const columns = [
   {
@@ -43,6 +33,11 @@ const columns = [
     title: 'Saída',
     dataIndex: 'saida',
     key: 'saida',
+  },
+  {
+    title: 'Total de horas',
+    dataIndex: 'totalHoras',
+    key: 'totalHoras'
   }
 ]
 </script>
@@ -55,7 +50,7 @@ StackL.log(compact)
       ClusterL.pop
         p {{ text }}
         template(v-if="record.obs[`${column.key}`]")
-          APopover(title='Observações' :overlayStyle="{ maxInlineSize: '300px' }")
+          APopover(title='Observações' :overlayStyle="{ maxInlineSize: '300px' }" :locale="{ emptyText: 'Sem registros' }")
             template(#content)
               p {{ record.obs[`${column.key}`] }}
             Icon.icon(name='feather:info' size='1em' color='var(--color-primary)')
@@ -66,6 +61,8 @@ StackL.log(compact)
 .pop
   --clusterl-gap: .5rem
   user-select: none
+  font-weight: var(--weight-medium)
+  color: var(--color-primary-dark-25)
 .icon
   cursor: pointer
 .log
