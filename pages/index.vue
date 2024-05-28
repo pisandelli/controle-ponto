@@ -4,6 +4,7 @@
 * @name 'PageIndex'
 * @version 1.0.0
 */
+import Button from '~/components/Button/Button.vue';
 import { useDayLogsStore } from '~/store/dayLogs'
 const time = useCurrentTime()
 const dayLogStore = useDayLogsStore()
@@ -14,6 +15,24 @@ function registerTime(key: string) {
   obs.value = ''
 }
 
+const pausa = ref(false)
+const textPausa = computed(() => pausa.value ? 'Terminar Pausa' : 'Iniciar Pausa')
+function registrarPausa() {
+  if (!pausa.value) {
+    registerTime('pausaInicio')
+    pausa.value = true
+  } else {
+    registerTime('pausaFim')
+    dayLogStore.setSomaPausa()
+    pausa.value = false
+
+  }
+}
+
+function registrarSaida() {
+  registerTime('saida')
+  dayLogStore.setSomaSaida()
+}
 </script>
 
 <template lang="pug">
@@ -31,8 +50,8 @@ CenterL(intrinsic)
 
     ClusterL(between)
       Button(success :disabled="dayLogStore.log.entrada" icon='feather:log-in' @click.prevent="registerTime('entrada')") Registrar entrada
-      Button(warning :disabled="!dayLogStore.log.entrada" icon='feather:coffee' @click.prevent="registerTime('pausaInicio')") Registrar pausa
-      Button(danger :disabled="!dayLogStore.log.entrada" icon='feather:log-out' @click.prevent="registerTime('saida')") Registrar saída
+      Button(:loading="pausa" warning :disabled="!dayLogStore.log.entrada || dayLogStore.log.saida" icon='feather:coffee' @click.prevent="registrarPausa") {{ textPausa }}
+      Button(danger :disabled="!dayLogStore.log.entrada || dayLogStore.log.saida || pausa" icon='feather:log-out' @click.prevent="registrarSaida") Registrar saída
 
   WLogTable.table
 

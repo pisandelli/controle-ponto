@@ -6,12 +6,14 @@
 */
 const props = defineProps<{
   icon?: string
+  loading?: boolean | string
 }>()
 </script>
 
 <template lang="pug">
 NuxtLink(class='button')
-  Icon(v-if='props.icon' :name='props.icon' size='1.5em')
+  Icon(v-if='props.icon && !props.loading' :name='props.icon' size='1.5em')
+  Icon.loader(v-if='props.loading' name='feather:loader' size='1.5em')
   slot
 </template>
 
@@ -42,5 +44,15 @@ $variants = primary accent success danger warning info
     color: var(--color-gray-50)
     pointer-events: none
     cursor: not-allowed
+.loader
+  animation: rotate 2s infinite linear
 
+@keyframes rotate {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(359deg);
+  }
+}
 </style>

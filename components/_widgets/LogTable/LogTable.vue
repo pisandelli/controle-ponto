@@ -5,7 +5,7 @@
 * @name 'WLogTable'
 * @version 1.0.0
 */
-import { useDayLogsStore } from '~/store/dayLogs';
+import { useDayLogsStore } from '@/store/dayLogs'
 const dayLogStore = useDayLogsStore()
 const dataSource = computed(() => {
   return !!dayLogStore.active ? [dayLogStore.log] : []
@@ -18,26 +18,25 @@ const columns = [
     title: 'Entrada',
     dataIndex: 'entrada',
     key: 'entrada',
+    duration: false
   },
   {
-    title: 'Inicio Pausa',
-    dataIndex: 'pausaInicio',
-    key: 'pausaInicio',
-  },
-  {
-    title: 'Fim Pausa',
-    dataIndex: 'pausaFim',
-    key: 'pausaFim',
+    title: 'Pausa',
+    dataIndex: 'pausaDuration',
+    key: 'pausaDuration',
+    duration: true
   },
   {
     title: 'Saída',
     dataIndex: 'saida',
     key: 'saida',
+    duration: false
   },
   {
     title: 'Total de horas',
-    dataIndex: 'totalHoras',
-    key: 'totalHoras'
+    dataIndex: 'soma',
+    key: 'soma',
+    duration: true
   }
 ]
 </script>
@@ -48,7 +47,8 @@ StackL.log(compact)
   ATable(:columns='columns' :dataSource='dataSource' :pagination='false')
     template(#bodyCell="{ column, text, record }")
       ClusterL.pop
-        p {{ text }}
+        p(v-if="!column.duration && text !== null") {{ $dayjs(text).format('HH:mm:ss') }}
+        p(v-else) {{ text }}
         template(v-if="record.obs[`${column.key}`]")
           APopover(title='Observações' :overlayStyle="{ maxInlineSize: '300px' }" :locale="{ emptyText: 'Sem registros' }")
             template(#content)

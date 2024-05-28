@@ -9,6 +9,7 @@ export default defineNuxtConfig({
       title: 'Controle de Ponto'
     }
   },
+
   // Read more about Nuxt Layers
   // https://nuxt.com/docs/getting-started/layers
   extends: [
@@ -16,11 +17,13 @@ export default defineNuxtConfig({
     // https://github.com/pisandelli/nuxt-layout-compositions
     'nuxt-layout-compositions'
   ],
+
   components: {
     dirs: [{ path: '~/components/_widgets', pathPrefix: false, prefix: 'W' },
       '~/components'
     ]
   },
+
   alias: {
     images: fileURLToPath(new URL('./assets/images', import.meta.url)),
     styles: fileURLToPath(new URL('./assets/styles', import.meta.url)),
@@ -32,7 +35,9 @@ export default defineNuxtConfig({
   typescript: {
     shim: false
   },
+
   css: ['@/assets/styles/reset.styl'],
+
   vite: {
     css: {
       preprocessorOptions: {
@@ -46,6 +51,7 @@ export default defineNuxtConfig({
       }
     }
   },
+
   modules: [
     ['@ant-design-vue/nuxt', {
       // Add options for Ant Design Vue
@@ -100,7 +106,12 @@ export default defineNuxtConfig({
       // Add custom options for dayjs
       // https://nuxt.com/modules/dayjs#configuration
       locales: ['pt-br'],
-      defaultLocale: 'pt-br'
+      defaultLocale: 'pt-br',
+      plugins: ['duration']
     }]
-  ]
+  ],
+
+  devtools: {
+    enabled: true
+  }
 })
