@@ -6,9 +6,13 @@
 */
 import Button from '~/components/Button/Button.vue';
 import { useDayLogsStore } from '~/store/dayLogs'
+import TextColor from 'utilities/TextColor.module.styl'
+const dayjs = useDayjs()
 const time = useCurrentTime()
 const dayLogStore = useDayLogsStore()
 const obs = ref('')
+
+const { pausaInicio, pausaFim } = storeToRefs(dayLogStore)
 
 /**
  * Logs the current time value to the dayLogStore and clears the obs.value.
@@ -25,16 +29,17 @@ function registerTime(key: string) {
  * When the pause is ended, the 'pausaFim' time is registered and the total pause duration is added to the dayLogStore.
  */
 const pausa = ref(false)
-const textPausa = computed(() => pausa.value ? 'Terminar Pausa' : 'Iniciar Pausa')
+const textPausa = computed(() =>
+  pausa.value ? 'Terminar Pausa' : 'Iniciar Pausa',
+)
 function registrarPausa() {
   if (!pausa.value) {
-    registerTime('pausaInicio')
+    pausaInicio.value = dayjs().unix()
     pausa.value = true
   } else {
-    registerTime('pausaFim')
+    pausaFim.value = dayjs().unix()
     dayLogStore.setSomaPausa()
     pausa.value = false
-
   }
 }
 
@@ -45,15 +50,42 @@ function registrarSaida() {
   registerTime('saida')
   dayLogStore.setSomaSaida()
 }
+
+const greetings = {
+  entrada: `Registre sua <span class='${TextColor.green}'>entrada.</span>`,
+  pausa: `Oba! Uma <span class='${TextColor.orange}'>pausa</span> para o café!`,
+  saida: `Registre sua <span class='${TextColor.orange}'>pausa</span> ou <span class='${TextColor.red}'>saída.</span>`,
+  descanso: `Tenha um bom descanso!`
+}
+
+/**
+ * Provides a set of greeting messages based on the current state of the day log.
+ * The messages are displayed in the UI to greet the user.
+ */
+const getGreetings = computed(() => {
+  if (!dayLogStore.log.entrada) {
+    return greetings.entrada
+  } else if (pausa.value) {
+    return greetings.pausa
+  } else if (dayLogStore.log.saida) {
+    return greetings.descanso
+  } else {
+    return greetings.saida
+  }
+})
+
+// const pauseCounter = computed(()=>{
+
+// })
 </script>
 
 <template lang="pug">
 CenterL(intrinsic)
-  ClientOnly
-    span.time {{ time }}
+  .greetings
+    h1.title(v-html='getGreetings')
   StackL.content
-    .greetings
-      h1.title Registre sua <span class='in'>entrada</span>
+    ClientOnly
+      span.time {{ time }}
 
     .input-group
       label(for='obs') Observações
