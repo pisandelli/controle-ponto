@@ -10,11 +10,20 @@ const time = useCurrentTime()
 const dayLogStore = useDayLogsStore()
 const obs = ref('')
 
+/**
+ * Logs the current time value to the dayLogStore and clears the obs.value.
+ * @param {string} key - The key to use when logging the time in the dayLogStore.
+ */
 function registerTime(key: string) {
   dayLogStore.logTime(key, obs.value);
   obs.value = ''
 }
 
+/**
+ * Registers the start and end of a pause in the user's activity.
+ * When the pause is started, the 'pausaInicio' time is registered.
+ * When the pause is ended, the 'pausaFim' time is registered and the total pause duration is added to the dayLogStore.
+ */
 const pausa = ref(false)
 const textPausa = computed(() => pausa.value ? 'Terminar Pausa' : 'Iniciar Pausa')
 function registrarPausa() {
@@ -29,6 +38,9 @@ function registrarPausa() {
   }
 }
 
+/**
+ * Registers the time for the user's departure and updates the total departure time in the dayLogStore.
+ */
 function registrarSaida() {
   registerTime('saida')
   dayLogStore.setSomaSaida()
