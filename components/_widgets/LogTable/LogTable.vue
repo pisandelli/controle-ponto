@@ -47,7 +47,7 @@ StackL.log(compact)
   ATable(:columns='columns' :dataSource='dataSource' :pagination='false')
     template(#bodyCell="{ column, text, record }")
       ClusterL.pop
-        p(v-if="!column.duration && text !== null") {{ $dayjs(text).format('HH:mm:ss') }}
+        p(v-if="!column.duration && text !== null") {{ $dayjs.unix(text).format('HH:mm:ss') }}
         p(v-else) {{ text }}
         template(v-if="record.obs[`${column.key}`]")
           APopover(title='Observações' :overlayStyle="{ maxInlineSize: '300px' }" :locale="{ emptyText: 'Sem registros' }")

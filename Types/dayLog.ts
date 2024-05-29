@@ -1,11 +1,9 @@
 // TODO: Review all types.
 export type DayLog = {
-  [key: string]: number | boolean | {} | null
-  entrada: Date | null
-  pausaInicio: Date | null
-  pausaFim: Date | null
+  [key: string]: string | number | {} | null
+  entrada: number | null
   pausaDuration: string | null
-  saida: Date | null
+  saida: number | null
   soma: string | null
   obs: {
     [key: string]: string | null

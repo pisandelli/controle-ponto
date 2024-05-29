@@ -3,10 +3,10 @@ export const useDayLogsStore = defineStore('dayLogs', () => {
   const dayjs = useDayjs()
   const active = ref(false)
   const duration = ref(0)
+  const pausaInicio = ref<number | null>(null)
+  const pausaFim = ref<number | null>(null)
   const log = reactive<DayLog>({
     entrada: null,
-    pausaInicio: null,
-    pausaFim: null,
     pausaDuration: null,
     saida: null,
     soma: null,
@@ -23,7 +23,7 @@ export const useDayLogsStore = defineStore('dayLogs', () => {
    * @param obs - The observation string to log.
    */
   function logTime(key: string, obs: string) {
-    log[key] = dayjs()
+    log[key] = dayjs().unix()
     log.obs[key] = obs
     active.value = true
   }
@@ -34,7 +34,7 @@ export const useDayLogsStore = defineStore('dayLogs', () => {
    * Also sets the `pausaInicio` and `pausaFim` properties of the log to `null`.
    */
   function setSomaPausa() {
-    if (log.pausaInicio && log.pausaFim) {
+    if (pausaInicio.value && pausaFim.value) {
       /**
        * Calculates the duration of a pause in a day log and formats it as a time string.
        *
@@ -44,11 +44,13 @@ export const useDayLogsStore = defineStore('dayLogs', () => {
        * @param log - The day log object containing the pause start and end timestamps.
        * @param duration - An object containing the accumulated duration value.
        */
-      duration.value += dayjs(log.pausaFim).diff(dayjs(log.pausaInicio), 's')
+      duration.value += dayjs
+        .unix(pausaFim.value)
+        .diff(dayjs.unix(pausaInicio.value), 's')
       log.pausaDuration = dayjs.duration(duration.value, 's').format('HH:mm:ss')
 
-      log.pausaInicio = null
-      log.pausaFim = null
+      // pausaInicio.value = null
+      // pausaFim.value = null
     }
   }
 
@@ -66,7 +68,9 @@ export const useDayLogsStore = defineStore('dayLogs', () => {
        * @param log - An object with `entrada` and `saida` properties representing the start and end times of a log entry.
        * @returns The duration in seconds between the `entrada` and `saida` times.
        */
-      const diffInOut = dayjs(log.saida).diff(dayjs(log.entrada), 's')
+      const entrada = dayjs.unix(log.entrada)
+      const saida = dayjs.unix(log.saida)
+      const diffInOut = dayjs(saida).diff(dayjs(entrada), 's')
       const durationInOut = dayjs.duration(diffInOut, 's')
 
       /**
@@ -82,7 +86,15 @@ export const useDayLogsStore = defineStore('dayLogs', () => {
     }
   }
 
-  return { active, log, logTime, setSomaPausa, setSomaSaida }
+  return {
+    active,
+    pausaInicio,
+    pausaFim,
+    log,
+    logTime,
+    setSomaPausa,
+    setSomaSaida,
+  }
 })
 
 if (import.meta.hot) {
