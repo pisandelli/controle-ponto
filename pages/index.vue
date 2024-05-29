@@ -32,13 +32,16 @@ const pausa = ref(false)
 const textPausa = computed(() =>
   pausa.value ? 'Terminar Pausa' : 'Iniciar Pausa',
 )
+const timer = useTimer()
 function registrarPausa() {
   if (!pausa.value) {
     pausaInicio.value = dayjs().unix()
+    timer.start()
     pausa.value = true
   } else {
     pausaFim.value = dayjs().unix()
     dayLogStore.setSomaPausa()
+    timer.stop()
     pausa.value = false
   }
 }
@@ -74,20 +77,18 @@ const getGreetings = computed(() => {
   }
 })
 
-// const pauseCounter = computed(()=>{
-
-// })
 </script>
 
 <template lang="pug">
 CenterL(intrinsic)
   .greetings
     h1.title(v-html='getGreetings')
-  StackL.content
+  StackL.content(v-if='!dayLogStore.log.saida')
     ClientOnly
-      span.time {{ time }}
+      span.time(v-if='pausa' :class='TextColor.orange') {{ timer.duration.value }}
+      span.time(v-else) {{ time }}
 
-    .input-group
+    .input-group(v-if='!pausa || !dayLogStore.log.entrada')
       label(for='obs') Observações
       ClientOnly
         ATextarea(:rows='4' id='obs' v-model:value='obs')
