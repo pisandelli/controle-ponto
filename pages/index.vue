@@ -38,6 +38,7 @@ function registrarPausa() {
     pausaInicio.value = dayjs().unix()
     timer.start()
     pausa.value = true
+    info()
   } else {
     pausaFim.value = dayjs().unix()
     dayLogStore.setSomaPausa()
@@ -76,6 +77,18 @@ const getGreetings = computed(() => {
     return greetings.saida
   }
 })
+
+const info = () => {
+  Modal.success({
+    title: 'Você iniciou seu período de pausa!',
+    content: h('div', {}, [
+      h('p', 'Quando voltar, não esqueça de registrar o término da sua pausa.'),
+    ]),
+    onOk() { },
+    centered: true,
+    okText: 'Entendi',
+  });
+};
 
 </script>
 

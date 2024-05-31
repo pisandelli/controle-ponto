@@ -12,15 +12,23 @@ export const defaultTheme = {
     colorBgContainer: '#fbfbfb',
     wireframe: true,
     borderRadius: 5,
-    colorBorder: 'var(--color-gray-25)'
-
+    colorBorder: 'var(--color-gray-25)',
   },
   components: {
     Modal: {
-      colorSplit: 'transparent'
+      colorSplit: 'transparent',
+      colorSuccess: 'var(--color-success)',
+      colorPrimary: 'var(--color-primary)',
+    },
+    Button: {
+      colorPrimary: 'var(--color-primary)',
+      controlOutline: 'rgba(5, 145, 255, 0.1)',
+      colorPrimaryHover: '#4096ff',
+      colorPrimaryActive: '#2f6bff',
+      colorPrimaryBorder: '#0958d9',
     },
     Form: {
-      fontSize: 'var(--font-size-base)'
-    }
-  }
+      fontSize: 'var(--font-size-base)',
+    },
+  },
 }
