@@ -19,7 +19,7 @@ const { pausaInicio, pausaFim } = storeToRefs(dayLogStore)
  * @param {string} key - The key to use when logging the time in the dayLogStore.
  */
 function registerTime(key: string) {
-  dayLogStore.logTime(key, obs.value);
+  dayLogStore.logTime(key, obs.value)
   obs.value = ''
 }
 
@@ -56,9 +56,9 @@ function registrarSaida() {
 }
 
 const greetings = {
-  entrada: `Registre sua <span class='${TextColor.green}'>entrada.</span>`,
-  pausa: `Oba! Uma <span class='${TextColor.orange}'>pausa</span> para o café!`,
-  saida: `Registre sua <span class='${TextColor.orange}'>pausa</span> ou <span class='${TextColor.red}'>saída.</span>`,
+  entrada: `Registre sua <span class="${TextColor.green}">entrada.</span>`,
+  pausa: `Oba! Uma <span class="${TextColor.orange}">pausa</span> para o café!`,
+  saida: `Registre sua <span class="${TextColor.orange}">pausa</span> ou <span class="${TextColor.red}">saída.</span>`,
   descanso: `Tenha um bom descanso!`
 }
 
