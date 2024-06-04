@@ -1,5 +1,8 @@
 {
   "private": true,
+  "prisma": {
+    "seed": "bun prisma/seed.mjs"
+  },
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
@@ -19,6 +22,7 @@
     "@nuxt/image": "1.7.0",
     "@nuxtjs/eslint-config-typescript": "^12.1.0",
     "@nuxtjs/supabase": "^1.2.2",
+    "@prisma/client": "^5.14.0",
     "@vue/language-plugin-pug": "^2.0.19",
     "cz-conventional-changelog": "^3.3.0",
     "dayjs-nuxt": "^2.1.9",
@@ -26,6 +30,7 @@
     "husky": "^9.0.11",
     "nuxt": "^3.11.2",
     "nuxt-layout-compositions": "^2.0.2",
+    "prisma": "^5.14.0",
     "pug": "^3.0.3",
     "stylus": "^0.63.0",
     "vitest": "^1.6.0"
