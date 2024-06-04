@@ -1,7 +1,7 @@
 {
   "private": true,
   "prisma": {
-    "seed": "bun prisma/seed.mjs"
+    "seed": "tsx prisma/seed.ts"
   },
   "scripts": {
     "build": "nuxt build",
@@ -33,6 +33,7 @@
     "prisma": "^5.14.0",
     "pug": "^3.0.3",
     "stylus": "^0.63.0",
+    "tsx": "^4.11.2",
     "vitest": "^1.6.0"
   },
   "dependencies": {
