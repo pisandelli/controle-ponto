@@ -8,7 +8,7 @@ import Button from '~/components/Button/Button.vue';
 import { useDayLogsStore } from '~/store/dayLogs'
 import TextColor from 'utilities/TextColor.module.styl'
 const dayjs = useDayjs()
-const time = useCurrentTime()
+const time = currentTime()
 const dayLogStore = useDayLogsStore()
 const obs = ref('')
 
@@ -32,7 +32,7 @@ const pausa = ref(false)
 const textPausa = computed(() =>
   pausa.value ? 'Terminar Pausa' : 'Iniciar Pausa',
 )
-const timer = useTimer()
+const timer = setTimer()
 function registrarPausa() {
   if (!pausa.value) {
     pausaInicio.value = dayjs().unix()
@@ -51,14 +51,14 @@ function registrarPausa() {
  * Registers the time for the user's departure and updates the total departure time in the dayLogStore.
  */
 function registrarSaida() {
-  registerTime('saida')
+  registerTime('endTime')
   dayLogStore.setSomaSaida()
 }
 
 const greetings = {
-  entrada: `Registre sua <span class="${TextColor.green}">entrada.</span>`,
+  startTime: `Registre sua <span class="${TextColor.green}">entrada.</span>`,
   pausa: `Oba! Uma <span class="${TextColor.orange}">pausa</span> para o café!`,
-  saida: `Registre sua <span class="${TextColor.orange}">pausa</span> ou <span class="${TextColor.red}">saída.</span>`,
+  endTime: `Registre sua <span class="${TextColor.orange}">pausa</span> ou <span class="${TextColor.red}">saída.</span>`,
   descanso: `Tenha um bom descanso!`
 }
 
@@ -67,14 +67,14 @@ const greetings = {
  * The messages are displayed in the UI to greet the user.
  */
 const getGreetings = computed(() => {
-  if (!dayLogStore.log.entrada) {
-    return greetings.entrada
+  if (!dayLogStore.log.startTime) {
+    return greetings.startTime
   } else if (pausa.value) {
     return greetings.pausa
-  } else if (dayLogStore.log.saida) {
+  } else if (dayLogStore.log.endTime) {
     return greetings.descanso
   } else {
-    return greetings.saida
+    return greetings.endTime
   }
 })
 
@@ -96,20 +96,20 @@ const info = () => {
 CenterL(intrinsic)
   .greetings
     h1.title(v-html='getGreetings')
-  StackL.content(v-if='!dayLogStore.log.saida')
+  StackL.content(v-if='!dayLogStore.log.endTime')
     ClientOnly
       span.time(v-if='pausa' :class='TextColor.orange') {{ timer.duration.value }}
       span.time(v-else) {{ time }}
 
-    .input-group(v-if='!pausa || !dayLogStore.log.entrada')
+    .input-group(v-if='!pausa || !dayLogStore.log.startTime')
       label(for='obs') Observações
       ClientOnly
         ATextarea(:rows='4' id='obs' v-model:value='obs')
 
     ClusterL(between)
-      Button(success :disabled="dayLogStore.log.entrada" icon='feather:log-in' @click.prevent="registerTime('entrada')") Registrar entrada
-      Button(:loading="pausa" warning :disabled="!dayLogStore.log.entrada || dayLogStore.log.saida" icon='feather:coffee' @click.prevent="registrarPausa") {{ textPausa }}
-      Button(danger :disabled="!dayLogStore.log.entrada || dayLogStore.log.saida || pausa" icon='feather:log-out' @click.prevent="registrarSaida") Registrar saída
+      Button(success :disabled="dayLogStore.log.startTime" icon='feather:log-in' @click.prevent="registerTime('startTime')") Registrar entrada
+      Button(:loading="pausa" warning :disabled="!dayLogStore.log.startTime || dayLogStore.log.endTime" icon='feather:coffee' @click.prevent="registrarPausa") {{ textPausa }}
+      Button(danger :disabled="!dayLogStore.log.startTime || dayLogStore.log.endTime || pausa" icon='feather:log-out' @click.prevent="registrarSaida") Registrar saída
 
   WLogTable.table
 

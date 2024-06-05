@@ -151,6 +151,15 @@ export default defineNuxtConfig({
     ]
   ],
 
+  runtimeConfig: {
+    public: {
+      API: '/api',
+      API_TIMELOG: {
+        START_TIME: 'startTime'
+      }
+    }
+  },
+
   devtools: {
     enabled: true
   }
