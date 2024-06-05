@@ -9,7 +9,7 @@ generator client {
   output   = "../node_modules/.prisma/client"
 }
 
-model User {
+model Users {
   id       Int      @id @default(autoincrement())
   email    String   @unique
   name     String?
@@ -18,11 +18,11 @@ model User {
 }
 model TimeLogs {
   id            Int       @id @default(autoincrement())
-  user          User      @relation(fields: [userId], references: [id])
+  user          Users      @relation(fields: [userId], references: [id])
   userId        Int
-  day           DateTime  @db.Date
-  startTime     DateTime  @db.Date
-  endTime       DateTime  @db.Date
-  pauseDuration DateTime? @db.Time(0)
-  totalDuration DateTime  @db.Time(0)
+  day           String
+  startTime     Int
+  endTime       Int?
+  pauseDuration String?
+  totalDuration String?
 }

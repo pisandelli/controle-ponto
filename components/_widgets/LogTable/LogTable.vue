@@ -11,31 +11,31 @@ const dataSource = computed(() => {
   return !!dayLogStore.active ? [dayLogStore.log] : []
 })
 
-const today = useToday()
+const today = formatToday()
 
 const columns = [
   {
     title: 'Entrada',
-    dataIndex: 'entrada',
-    key: 'entrada',
+    dataIndex: 'startTime',
+    key: 'startTime',
     duration: false
   },
   {
     title: 'Pausa',
-    dataIndex: 'pausaDuration',
-    key: 'pausaDuration',
+    dataIndex: 'pauseDuration',
+    key: 'pauseDuration',
     duration: true
   },
   {
     title: 'Saída',
-    dataIndex: 'saida',
-    key: 'saida',
+    dataIndex: 'endTime',
+    key: 'endTime',
     duration: false
   },
   {
     title: 'Total de horas',
-    dataIndex: 'soma',
-    key: 'soma',
+    dataIndex: 'totalDuration',
+    key: 'totalDuration',
     duration: true
   }
 ]

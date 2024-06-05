@@ -4,7 +4,7 @@
  * @param {string} [format] - The format string to use for the date. If not provided, the default format is 'dddd - DD/MM/YYYY'.
  * @returns {string} The current date formatted as a string.
  */
-export const useToday = (format?: string) => {
-  const dayjs = useDayjs();
-  return dayjs().format(format ?? 'dddd - DD/MM/YYYY');
-};
+export default function (format?: string): string {
+  const dayjs = useDayjs()
+  return dayjs().format(format ?? 'dddd - DD/MM/YYYY')
+}
