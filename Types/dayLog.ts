@@ -1,4 +1,3 @@
-// TODO: Review all types.
 export type DayLog = {
   [key: string]: string | number | {} | null
   startTime: number | null
