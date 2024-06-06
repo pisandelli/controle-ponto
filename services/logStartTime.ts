@@ -20,7 +20,7 @@ const setStartTime = async (startTime: number, userId: number) => {
   if (error.value) {
     throw createError({
       ...error.value,
-      statusMessage: 'Could not post startTime'
+      message: 'Could not post startTime'
     })
   }
 
@@ -41,7 +41,7 @@ const getStartTime = async (userId: number, day: string) => {
   if (error.value) {
     throw createError({
       ...error.value,
-      statusMessage: 'Could not get startTime'
+      message: 'Could not get startTime'
     })
   }
   return data
