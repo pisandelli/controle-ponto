@@ -1,5 +1,8 @@
 import type { DayLog } from '~/Types/dayLog'
+import checkLog from '~/services/checkLog'
+// import getStartTime from '~/services/getLog'
 export const useDayLogsStore = defineStore('dayLogs', () => {
+  const userId = ref(1)
   const dayjs = useDayjs()
   const active = ref(false)
   const duration = ref(0)
@@ -16,6 +19,20 @@ export const useDayLogsStore = defineStore('dayLogs', () => {
       endTime: null
     }
   })
+
+  /**
+   * Checks if there is an existing log and sets the initial state of the day log.
+   *
+   * This function is called to initialize the day log state. It checks if there is an existing log using the `checkLog` function, and sets the `startTime` property of the `log` object accordingly. It also sets the `active` flag based on whether there is an existing log or not.
+   */
+  async function __checkInitialLog() {
+    const hasLog = await checkLog(userId.value)
+    if (hasLog) {
+      log.startTime = hasLog.startTime
+      active.value = true
+    }
+  }
+  __checkInitialLog()
 
   /**
    * Logs the current time and an observation string for a given key.
@@ -83,6 +100,22 @@ export const useDayLogsStore = defineStore('dayLogs', () => {
     }
   }
 
+  // TODO: Get UserId from Supabase
+  /**
+   * Checks the start time for the user's log entry.
+   *
+   * This function retrieves the start time for the user's log entry from the server using the `getLog` function. If the start time is successfully retrieved, it is stored in the `log.startTime` property. If an error occurs, the error is returned.
+   *
+   * @param userId - The ID of the user whose log entry start time is being checked.
+   * @returns The start time of the user's log entry, or an error if the retrieval fails.
+   */
+  // async function checkStartTime(userId: number | 1) {
+  //   const response = await getStartTime(userId, 'startTime')
+  //   // .then((): number => (log.startTime = response))
+  //   // .catch((error) => error)
+  //   return response
+  // }
+
   return {
     active,
     pausaInicio,
@@ -91,6 +124,7 @@ export const useDayLogsStore = defineStore('dayLogs', () => {
     logTime,
     setSomaPausa,
     setSomaSaida
+    // checkStartTime
   }
 })
 

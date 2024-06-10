@@ -11,7 +11,7 @@ const dataSource = computed(() => {
   return !!dayLogStore.active ? [dayLogStore.log] : []
 })
 
-const today = formatToday()
+const today = formatToday('dddd - DD/MM/YYYY')
 
 const columns = [
   {
