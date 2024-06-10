@@ -6,5 +6,5 @@
  */
 export default function (format?: string): string {
   const dayjs = useDayjs()
-  return dayjs().format(format ?? 'dddd - DD/MM/YYYY')
+  return dayjs().format(format ?? 'DD/MM/YYYY')
 }

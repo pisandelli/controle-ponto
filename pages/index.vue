@@ -4,15 +4,16 @@
 * @name 'PageIndex'
 * @version 1.0.0
 */
-import Button from '~/components/Button/Button.vue';
 import { useDayLogsStore } from '~/store/dayLogs'
 import TextColor from 'utilities/TextColor.module.styl'
+
 const dayjs = useDayjs()
 const time = currentTime()
 const dayLogStore = useDayLogsStore()
 const obs = ref('')
-
 const { pausaInicio, pausaFim } = storeToRefs(dayLogStore)
+
+
 
 /**
  * Logs the current time value to the dayLogStore and clears the obs.value.
@@ -89,7 +90,6 @@ const info = () => {
     okText: 'Entendi',
   });
 };
-
 </script>
 
 <template lang="pug">
