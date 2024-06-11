@@ -11,9 +11,6 @@ const dayjs = useDayjs()
 const time = currentTime()
 const dayLogStore = useDayLogsStore()
 const obs = ref('')
-const { pausaInicio, pausaFim } = storeToRefs(dayLogStore)
-
-
 
 /**
  * Logs the current time value to the dayLogStore and clears the obs.value.
@@ -35,18 +32,27 @@ const textPausa = computed(() =>
 )
 const timer = setTimer()
 function registrarPausa() {
+  if (!dayLogStore.log.pausaInicio) {
+    dayLogStore.log.pausaInicio = dayjs().unix()
+  }
   if (!pausa.value) {
-    pausaInicio.value = dayjs().unix()
     timer.start()
     pausa.value = true
     info()
   } else {
-    pausaFim.value = dayjs().unix()
+    dayLogStore.log.pausaFim = dayjs().unix()
     dayLogStore.setSomaPausa()
     timer.stop()
     pausa.value = false
   }
 }
+
+onMounted(() => {
+  if (!dayLogStore.log.pauseDuration && dayLogStore.log.pausaInicio) {
+    timer.time.value = dayjs().diff(dayjs.unix(dayLogStore.log.pausaInicio), 's')
+    registrarPausa()
+  }
+})
 
 /**
  * Registers the time for the user's departure and updates the total departure time in the dayLogStore.

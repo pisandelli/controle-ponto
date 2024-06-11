@@ -2,16 +2,18 @@ import type { DayLog } from '~/Types/dayLog'
 import checkLog from '~/services/checkLog'
 // import getStartTime from '~/services/getLog'
 export const useDayLogsStore = defineStore('dayLogs', () => {
+  // TODO: Get UserId from Supabase
   const userId = ref(1)
   const dayjs = useDayjs()
   const active = ref(false)
   const duration = ref(0)
-  const pausaInicio = ref<number | null>(null)
-  const pausaFim = ref<number | null>(null)
   const log = reactive<DayLog>({
+    id: null,
     startTime: null,
     pauseDuration: null,
     endTime: null,
+    pausaInicio: null,
+    pausaFim: null,
     totalDuration: null,
     obs: {
       startTime: null,
@@ -28,7 +30,12 @@ export const useDayLogsStore = defineStore('dayLogs', () => {
   async function __checkInitialLog() {
     const hasLog = await checkLog(userId.value)
     if (hasLog) {
+      //TODO: change this to a log object like when obs are ready
+      log.id = hasLog.id
       log.startTime = hasLog.startTime
+      log.pausaInicio = hasLog.pausaInicio ?? null
+      log.pausaFim = hasLog.pausaFim ?? null
+      log.pauseDuration = hasLog.pauseDuration ?? null
       active.value = true
     }
   }
@@ -46,25 +53,17 @@ export const useDayLogsStore = defineStore('dayLogs', () => {
   }
 
   /**
-   * Sets the duration of a pause in a day log.
-   * If a pause start and end time are set, calculates the duration of the pause in seconds and updates the `pauseDuration` property of the log.
-   * Also sets the `pausaInicio` and `pausaFim` properties of the log to `null`.
+   * Calculates the duration of a pause and updates the `duration` and `pauseDuration` properties of the `log` object.
+   *
+   * This function is called when the pause time is available (i.e., `log.pausaInicio` and `log.pausaFim` are not null). It calculates the duration of the pause in seconds, updates the `duration` and `pauseDuration` properties of the `log` object, and sets `log.pausaInicio` to `null`.
    */
   function setSomaPausa() {
-    if (pausaInicio.value && pausaFim.value) {
-      /**
-       * Calculates the duration of a pause in a day log and formats it as a time string.
-       *
-       * The `duration.value` is incremented by the difference in seconds between the `pausaFim` and `pausaInicio` timestamps of the `log` object.
-       * The `pauseDuration` property of the `log` object is then set to the formatted duration string.
-       *
-       * @param log - The day log object containing the pause start and end timestamps.
-       * @param duration - An object containing the accumulated duration value.
-       */
+    if (log.pausaInicio && log.pausaFim) {
       duration.value += dayjs
-        .unix(pausaFim.value)
-        .diff(dayjs.unix(pausaInicio.value), 's')
+        .unix(log.pausaFim)
+        .diff(dayjs.unix(log.pausaInicio), 's')
       log.pauseDuration = dayjs.duration(duration.value, 's').format('HH:mm:ss')
+      log.pausaInicio = null
     }
   }
 
@@ -100,31 +99,13 @@ export const useDayLogsStore = defineStore('dayLogs', () => {
     }
   }
 
-  // TODO: Get UserId from Supabase
-  /**
-   * Checks the start time for the user's log entry.
-   *
-   * This function retrieves the start time for the user's log entry from the server using the `getLog` function. If the start time is successfully retrieved, it is stored in the `log.startTime` property. If an error occurs, the error is returned.
-   *
-   * @param userId - The ID of the user whose log entry start time is being checked.
-   * @returns The start time of the user's log entry, or an error if the retrieval fails.
-   */
-  // async function checkStartTime(userId: number | 1) {
-  //   const response = await getStartTime(userId, 'startTime')
-  //   // .then((): number => (log.startTime = response))
-  //   // .catch((error) => error)
-  //   return response
-  // }
-
   return {
+    duration,
     active,
-    pausaInicio,
-    pausaFim,
     log,
     logTime,
     setSomaPausa,
     setSomaSaida
-    // checkStartTime
   }
 })
 

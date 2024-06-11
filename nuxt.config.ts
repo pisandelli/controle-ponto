@@ -155,6 +155,7 @@ export default defineNuxtConfig({
     public: {
       API: '/api',
       API_TIMELOG: {
+        POST_LOG: 'postLog',
         GET_LOG: 'getLog',
         START_TIME: 'startTime',
         CHECK_LOG: 'checkLog'

@@ -23,6 +23,8 @@ model TimeLogs {
   day           String
   startTime     Int
   endTime       Int?
+  pausaInicio   Int?
+  pausaFim      Int?
   pauseDuration String?
   totalDuration String?
 }
