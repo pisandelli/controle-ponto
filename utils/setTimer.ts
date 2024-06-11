@@ -24,5 +24,5 @@ export default function () {
       duration.value = dayjs.duration(0, 's').format('HH:mm:ss')
     }
   }
-  return { duration, start, stop }
+  return { time, duration, start, stop }
 }
