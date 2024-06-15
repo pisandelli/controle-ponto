@@ -6,22 +6,19 @@
  */
 export default async (startTime: number, userId: number) => {
   const config = useRuntimeConfig().public
-  const { error } = await useAsyncData('setStartTime', () =>
-    $fetch(`${config.API}/${config.API_TIMELOG.START_TIME}`, {
-      method: 'post',
-      body: {
-        userId,
-        startTime
-      }
-    })
-  )
 
-  if (error.value) {
+  await $fetch(`${config.API}/${config.API_TIMELOG.START_TIME}`, {
+    method: 'post',
+    body: {
+      userId,
+      startTime
+    }
+  }).catch((error: any) => {
     throw createError({
       ...error.value,
       message: 'Could not post startTime'
     })
-  }
+  })
 
   return true
 }

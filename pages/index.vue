@@ -11,36 +11,47 @@ const dayjs = useDayjs()
 const time = currentTime()
 const dayLogStore = useDayLogsStore()
 const obs = ref('')
+const loadingLabel = ref('Carregando...')
 
 /**
- * Logs the current time value to the dayLogStore and clears the obs.value.
- * @param {string} key - The key to use when logging the time in the dayLogStore.
+ * Checks if there is an unstopped pause registered in the dayLogStore, 
+ * and if so, restarts the pause timer and registers the pause.
+ * This is called when the component is mounted, to ensure any previous 
+ * pauses are properly restored.
  */
-function registerTime(key: string) {
-  dayLogStore.logTime(key, obs.value)
-  obs.value = ''
-}
+onMounted(() => {
+  if (!dayLogStore.log.pauseDuration && dayLogStore.log.pausaInicio) {
+    timer.time.value = dayjs().diff(
+      dayjs.unix(dayLogStore.log.pausaInicio),
+      's'
+    )
+    registrarPausa()
+  }
+})
+
+
+const pausa = ref(false)
+const textPausa = computed(() => pausa.value ? 'Terminar Pausa' : 'Iniciar Pausa')
+const timer = setTimer()
 
 /**
  * Registers the start and end of a pause in the user's activity.
  * When the pause is started, the 'pausaInicio' time is registered.
- * When the pause is ended, the 'pausaFim' time is registered and the total pause duration is added to the dayLogStore.
+ * When the pause is ended, the 'pausaFim' time is registered and 
+ * the total pause duration is added to the dayLogStore.
  */
-const pausa = ref(false)
-const textPausa = computed(() =>
-  pausa.value ? 'Terminar Pausa' : 'Iniciar Pausa',
-)
-const timer = setTimer()
 function registrarPausa() {
   if (!dayLogStore.log.pausaInicio) {
     dayLogStore.log.pausaInicio = dayjs().unix()
   }
   if (!pausa.value) {
+    loadingLabel.value = 'Iniciando Pausa...'
     timer.start()
     pausa.value = true
     dayLogStore.logTime('pausaInicio')
-    info()
+    modalAlert()
   } else {
+    loadingLabel.value = 'Finalizando Pausa...'
     dayLogStore.log.pausaFim = dayjs().unix()
     timer.stop()
     pausa.value = false
@@ -49,33 +60,74 @@ function registrarPausa() {
   }
 }
 
-onMounted(() => {
-  //Check if we have an unstopped pause registered.
-  if (!dayLogStore.log.pauseDuration && dayLogStore.log.pausaInicio) {
-    timer.time.value = dayjs().diff(dayjs.unix(dayLogStore.log.pausaInicio), 's')
-    registrarPausa()
-  }
-})
+/**
+ * Displays a success modal to the user, informing them that 
+ * they have started their break period.
+ * The modal includes a message reminding the user to remember 
+ * to register the end of their break when they return.
+ */
+const modalAlert = () => {
+  Modal.success({
+    title: 'Você iniciou seu período de pausa!',
+    content: h('div', {}, [
+      h(
+        'p',
+        'Quando voltar, não esqueça de registrar o término da sua pausa.'
+      )
+    ]),
+    onOk() { },
+    centered: true,
+    okText: 'Entendi'
+  })
+}
 
 /**
- * Registers the time for the user's departure and updates the total departure time in the dayLogStore.
+ * Logs the current time value to the dayLogStore and clears the obs.value.
+ * @param {string} key - The key to use when logging the time in the dayLogStore.
  */
-function registrarSaida() {
-  registerTime('endTime')
-  dayLogStore.setSomaSaida()
+async function registerTime(key: string) {
+  await dayLogStore.logTime(key, obs.value)
+  obs.value = ''
 }
 
-const greetings = {
-  startTime: `Registre sua <span class="${TextColor.green}">entrada.</span>`,
-  pausa: `Oba! Uma <span class="${TextColor.orange}">pausa</span> para o café!`,
-  endTime: `Registre sua <span class="${TextColor.orange}">pausa</span> ou <span class="${TextColor.red}">saída.</span>`,
-  descanso: `Tenha um bom descanso!`
+/**
+ * Registers the user's entry time for the day.
+ * This function is called when the user indicates they have arrived for the day.
+ * It sets the `loadingLabel` to indicate the action being performed,
+ * and then calls the `registerTime` function to log the start time to the `dayLogStore`.
+ */
+function registrarEntrada() {
+  loadingLabel.value = 'Registrando entrada...'
+  registerTime('startTime')
 }
+
+
+/**
+ * Registers the user's exit time for the day.
+ * This function is called when the user indicates they are leaving for the day.
+ * It sets the `loadingLabel` to indicate the action being performed,
+ * calls the `registerTime` function to log the end time to the `dayLogStore`,
+ * and then calls the `setSomaSaida` function to update the total time worked.
+ */
+async function registrarSaida() {
+  loadingLabel.value = 'Registrando saída...'
+  const register = await registerTime('endTime')
+  const soma = await dayLogStore.setSomaSaida()
+  Promise.all([register, soma])
+}
+
 
 /**
  * Provides a set of greeting messages based on the current state of the day log.
  * The messages are displayed in the UI to greet the user.
  */
+const greetings = {
+  startTime: `Registre sua <span class="${TextColor.green}">entrada.</span>`,
+  pausa: `Oba! Uma <span class="${TextColor.info}">pausa</span> para o café!`,
+  endTime: `Registre sua <span class="${TextColor.info}">pausa</span> ou <span class="${TextColor.red}">saída.</span>`,
+  descanso: `Tenha um bom descanso!`
+}
+
 const getGreetings = computed(() => {
   if (!dayLogStore.log.startTime) {
     return greetings.startTime
@@ -87,22 +139,12 @@ const getGreetings = computed(() => {
     return greetings.endTime
   }
 })
-
-const info = () => {
-  Modal.success({
-    title: 'Você iniciou seu período de pausa!',
-    content: h('div', {}, [
-      h('p', 'Quando voltar, não esqueça de registrar o término da sua pausa.'),
-    ]),
-    onOk() { },
-    centered: true,
-    okText: 'Entendi',
-  });
-};
 </script>
 
 <template lang="pug">
-CenterL(intrinsic)
+ModalL(v-if='dayLogStore.isLoading')
+  Loading(:label='loadingLabel')
+CenterL(v-else intrinsic)
   .greetings
     h1.title(v-html='getGreetings')
   StackL.content(v-if='!dayLogStore.log.endTime')
@@ -116,8 +158,8 @@ CenterL(intrinsic)
         ATextarea(:rows='4' id='obs' v-model:value='obs')
 
     ClusterL(between)
-      Button(success :disabled="dayLogStore.log.startTime" icon='feather:log-in' @click.prevent="registerTime('startTime')") Registrar entrada
-      Button(:loading="pausa" warning :disabled="!dayLogStore.log.startTime || dayLogStore.log.endTime" icon='feather:coffee' @click.prevent="registrarPausa") {{ textPausa }}
+      Button(success :disabled="dayLogStore.log.startTime" icon='feather:log-in' @click.prevent="registrarEntrada") Registrar entrada
+      Button(:loading="pausa" info :disabled="!dayLogStore.log.startTime || dayLogStore.log.endTime" icon='feather:coffee' @click.prevent="registrarPausa") {{ textPausa }}
       Button(danger :disabled="!dayLogStore.log.startTime || dayLogStore.log.endTime || pausa" icon='feather:log-out' @click.prevent="registrarSaida") Registrar saída
 
   WLogTable.table

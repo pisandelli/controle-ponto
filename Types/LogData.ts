@@ -3,6 +3,6 @@ export type LogData = {
   pausaInicio?: number
   pausaFim?: number
   endTime?: number
-  pauseDuration?: string
-  totalDuration?: string
+  pauseDuration?: number
+  totalDuration?: number
 }
