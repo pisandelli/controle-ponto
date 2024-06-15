@@ -38,16 +38,19 @@ function registrarPausa() {
   if (!pausa.value) {
     timer.start()
     pausa.value = true
+    dayLogStore.logTime('pausaInicio')
     info()
   } else {
     dayLogStore.log.pausaFim = dayjs().unix()
-    dayLogStore.setSomaPausa()
     timer.stop()
     pausa.value = false
+    dayLogStore.logTime('pausaFim')
+    dayLogStore.setSomaPausa()
   }
 }
 
 onMounted(() => {
+  //Check if we have an unstopped pause registered.
   if (!dayLogStore.log.pauseDuration && dayLogStore.log.pausaInicio) {
     timer.time.value = dayjs().diff(dayjs.unix(dayLogStore.log.pausaInicio), 's')
     registrarPausa()
