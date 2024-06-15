@@ -1,12 +1,14 @@
 import type { DayLog } from '~/Types/dayLog'
 import checkLog from '~/services/checkLog'
-// import getStartTime from '~/services/getLog'
+import postLog from '~/services/postLog'
+import logStartTime from '~/services/logStartTime'
 export const useDayLogsStore = defineStore('dayLogs', () => {
   // TODO: Get UserId from Supabase
   const userId = ref(1)
   const dayjs = useDayjs()
   const active = ref(false)
   const duration = ref(0)
+  const firstLog = ref(true)
   const log = reactive<DayLog>({
     id: null,
     startTime: null,
@@ -27,28 +29,49 @@ export const useDayLogsStore = defineStore('dayLogs', () => {
    *
    * This function is called to initialize the day log state. It checks if there is an existing log using the `checkLog` function, and sets the `startTime` property of the `log` object accordingly. It also sets the `active` flag based on whether there is an existing log or not.
    */
-  async function __checkInitialLog() {
+  async function __updateTimeLog() {
     const hasLog = await checkLog(userId.value)
     if (hasLog) {
-      //TODO: change this to a log object like when obs are ready
+      firstLog.value = false
       log.id = hasLog.id
       log.startTime = hasLog.startTime
+      log.endTime = hasLog.endTime ?? null
       log.pausaInicio = hasLog.pausaInicio ?? null
       log.pausaFim = hasLog.pausaFim ?? null
       log.pauseDuration = hasLog.pauseDuration ?? null
       active.value = true
+      if (hasLog.pausaFim && hasLog.pausaInicio) {
+        duration.value = dayjs
+          .unix(hasLog.pausaFim)
+          .diff(dayjs.unix(hasLog.pausaInicio), 's')
+      }
     }
   }
-  __checkInitialLog()
+
+  ///////////////////////////////////////////////////////////
+  //TODO: reverificar toda o algoritmo. está tudo muito amarrado
+  ///////////////////////////////////////////////////////////
+
+  __updateTimeLog()
 
   /**
-   * Logs the current time and an observation string for a given key.
-   * @param key - The key to associate the time and observation with.
-   * @param obs - The observation string to log.
+   * Logs the time for a specific event in the day log.
+   *
+   * This function is responsible for logging the start time of the day log if it's the first log, or updating the existing log with the current time for a specific event (e.g., start time, pause start, pause end, end time).
+   *
+   * @param key - The key to update in the `log` object (e.g., 'startTime', 'pausaInicio', 'pausaFim', 'endTime').
+   * @param obs - A string observation to associate with the logged event.
    */
-  function logTime(key: string, obs: string) {
-    log[key] = dayjs().unix()
-    log.obs[key] = obs
+  async function logTime(key: string, obs?: string) {
+    const now = dayjs().unix()
+    if (firstLog.value) {
+      key = 'startTime'
+      await logStartTime(now, userId.value)
+      firstLog.value = false
+    } else {
+      if (log.id) await postLog({ [key]: now }, log.id)
+    }
+    __updateTimeLog()
     active.value = true
   }
 
@@ -57,13 +80,16 @@ export const useDayLogsStore = defineStore('dayLogs', () => {
    *
    * This function is called when the pause time is available (i.e., `log.pausaInicio` and `log.pausaFim` are not null). It calculates the duration of the pause in seconds, updates the `duration` and `pauseDuration` properties of the `log` object, and sets `log.pausaInicio` to `null`.
    */
-  function setSomaPausa() {
+  async function setSomaPausa() {
     if (log.pausaInicio && log.pausaFim) {
       duration.value += dayjs
         .unix(log.pausaFim)
         .diff(dayjs.unix(log.pausaInicio), 's')
-      log.pauseDuration = dayjs.duration(duration.value, 's').format('HH:mm:ss')
-      log.pausaInicio = null
+      const pauseDuration = dayjs
+        .duration(duration.value, 's')
+        .format('HH:mm:ss')
+      if (log.id) await postLog({ pauseDuration }, log.id)
+      __updateTimeLog()
     }
   }
 
@@ -100,7 +126,7 @@ export const useDayLogsStore = defineStore('dayLogs', () => {
   }
 
   return {
-    duration,
+    duration, // can remove??
     active,
     log,
     logTime,
