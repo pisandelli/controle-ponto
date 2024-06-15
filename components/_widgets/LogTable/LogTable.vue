@@ -48,7 +48,7 @@ StackL.log(compact)
     template(#bodyCell="{ column, text, record }")
       ClusterL.pop
         p(v-if="!column.duration && text !== null") {{ $dayjs.unix(text).format('HH:mm:ss') }}
-        p(v-else) {{ text }}
+        p(v-else-if="column.duration && text !== null") {{ $dayjs.duration(text, 's').format('HH:mm:ss') }}
         template(v-if="record.obs[`${column.key}`]")
           APopover(title='Observações' :overlayStyle="{ maxInlineSize: '300px' }" :locale="{ emptyText: 'Sem registros' }")
             template(#content)

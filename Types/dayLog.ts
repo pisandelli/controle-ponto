@@ -2,9 +2,9 @@ export type DayLog = {
   [key: string]: string | number | {} | null
   id: number | null
   startTime: number | null
-  pauseDuration: string | null
+  pauseDuration: number
   endTime: number | null
-  totalDuration: string | null
+  totalDuration: number
   pausaInicio: number | null
   pausaFim: number | null
   obs: {

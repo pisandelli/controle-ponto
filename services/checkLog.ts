@@ -9,16 +9,14 @@
  */
 export default async (userId: number, day?: string) => {
   const config = useRuntimeConfig().public
-  const { data, error } = await useAsyncData('checkLog', () => {
-    return $fetch(
-      `${config.API}/${config.API_TIMELOG.CHECK_LOG}?userId=${userId}&day=${day ?? formatToday()}`
-    )
-  })
-  if (error.value) {
+  const data = $fetch(
+    `${config.API}/${config.API_TIMELOG.CHECK_LOG}?userId=${userId}&day=${day ?? formatToday()}`
+  ).catch((error: any) => {
     throw createError({
       ...error.value,
       message: `Could not get timelog`
     })
-  }
-  return data.value
+  })
+
+  return data
 }
