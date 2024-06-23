@@ -19,6 +19,7 @@ _translate()
   transition-timing-function: cubic-bezier(.7, 0, .3, 1)
 
 //Generate Color Palette
+//https://stylus-lang.com/docs/bifs.html#range-start-stop-step
 _color-palette($name, $color, $amount=25,)
   --color-{$name}: $color
   for i in range($amount, (100 - $amount), $amount)
