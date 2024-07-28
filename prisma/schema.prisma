@@ -1,0 +1,40 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
+}
+
+model Users {
+  id       Int      @id @default(autoincrement())
+  email    String   @unique
+  name     String?
+  password String?
+  timeLogs TimeLogs[]
+}
+model TimeLogs {
+  id            Int    @id @default(autoincrement())
+  user          Users  @relation(fields: [userId], references: [id])
+  userId        Int
+  day           String
+  startTime     Int
+  endTime       Int?
+  pausaInicio   Int?
+  pausaFim      Int?
+  pauseDuration Int?
+  totalDuration Int?
+  obsLogs       ObsLogs[]
+
+}
+
+model ObsLogs {
+  id             Int       @id @default(autoincrement())
+  timeLog        TimeLogs  @relation(fields: [logId], references: [id])
+  logId          Int
+  startTimeObs   String?
+  endTimeObs     String?
+}

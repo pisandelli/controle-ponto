@@ -6,13 +6,14 @@
     "**/CVS": true,
     "**/.DS_Store": true,
     "**/Thumbs.db": true,
-    "**/node_modules": false
+    "**/node_modules": true
   },
   "i18n-ally.localesPaths": [
     "locales"
   ],
   "i18n-ally.keystyle": "nested",
   "cSpell.words": [
-    "intlify"
+    "intlify",
+    "TIMELOG"
   ],
 }

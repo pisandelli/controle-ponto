@@ -1,14 +1,15 @@
+@require 'abstracts/mixins.styl'
 :root
   --animation-speed: 0.5s
-  --border-radius: 0.5rem
+  --border-radius: 0.3rem
   --ratio: 1.5
-  --max-width: 65ch
+  --max-width: 128ch
   --gap: 1.5rem
 
   //Layout Composition Defaults
   --topbar-height: 3.4375rem
 
-  --font-plain: 'Open Sans', sans-serif
+  --font-plain: 'Inter', sans-serif
 
   --font-size-tiny: 0.75rem
   --font-size-small: 0.875rem
@@ -39,15 +40,40 @@
   --border-medium: calc(var(--border-thin) * calc(var(--ratio) * 2))
   --border-thick: calc(var(--border-medium) * calc(var(--ratio) * 2.5))
 
-  --color-danger: #FF3B30
-  --color-default: #595959
-  --color-grey-dark: #8C8C8C
-  --color-grey-light: #f0f0f0
+  //COLOR PALETTE
+  //
+  // Defines a set of color palette variables for use
+  // throughout the application.
+  // The variables are named using the format
+  // --color-{$name}-{$amount} for light colors and
+  // --color-{$name}-dark-{$amount} for dark colors.
+  // The default scale variation for $amount is 25.
+  // --color-primary-25 is the lightest primary color,
+  // --color-primary-dark-75 is the darkest primary color.
+  // --color-primary is the default color.
+  // The default variables for primary palette are:
+  // --color-primary, 
+  // --color-primary-25, 
+  // --color-primary-50, 
+  // --color-primary-75,
+  // --color-primary-dark-25,
+  // --color-primary-dark-50,
+  // --color-primary-dark-75
+  // It's possible to change the scale variation adding a third argument to the mixin.
+  // E.g. _color-palette('primary', #0090ea, 10) will increase the scale variation to 10.
+  // --color-primary, --color-primary-10, --color-primary-20, --color-primary-30, etc...
+  //
+  _color-palette('primary', #0090ea)
+  _color-palette('secondary', #9c19a3)
+  _color-palette('accent', #e01b87)
+  _color-palette('success', #34C759)
+  _color-palette('warning', #FA8C16)
+  _color-palette('danger', #FF3B30)
+  _color-palette('info', #00a1d0)
+  _color-palette('gray', #999)
+
   --color-neutral: #fbfbfb
-  --color-primary: #597EF7
-  --color-secondary: #F7BD37
-  --color-success: #34C759
-  --color-warning: #FA8C16
+  --color-default: var(--color-gray-dark-50)
 
   font-family: var(--font-plain)
   line-height: var(--ratio)
