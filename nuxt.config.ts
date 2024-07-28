@@ -5,7 +5,8 @@ export default defineNuxtConfig({
       htmlAttrs: {
         lang: 'pt-br'
       },
-      title: 'Controle de Ponto'
+      title: 'Controle de Ponto',
+      script: [{ src: 'https://accounts.google.com/gsi/client', async: true }]
     }
   },
 
@@ -145,8 +146,8 @@ export default defineNuxtConfig({
       '@nuxtjs/supabase',
       {
         url: process.env.SUPABASE_URL,
-        key: process.env.SUPABASE_KEY,
-        redirect: false
+        key: process.env.SUPABASE_KEY
+        // redirect: false
       }
     ]
   ],
