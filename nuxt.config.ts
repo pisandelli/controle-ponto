@@ -146,8 +146,11 @@ export default defineNuxtConfig({
       '@nuxtjs/supabase',
       {
         url: process.env.SUPABASE_URL,
-        key: process.env.SUPABASE_KEY
-        // redirect: false
+        key: process.env.SUPABASE_KEY,
+        // redirect: false,
+        redirectOptions: {
+          cookieRedirect: true
+        }
       }
     ]
   ],
