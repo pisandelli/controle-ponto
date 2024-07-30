@@ -40,7 +40,7 @@ async function handleSignInWithGoogle(response: { credential: any; }) {
       <div style="max-inline-size:200px">
         <div id="g_id_onload" data-client_id="722253408739-m75kgrmghav5lk7o2gqdqusvhu530e9r.apps.googleusercontent.com"
           data-context="signin" :data-callback="handleSignInWithGoogle" data-ux_mode="popup"
-          data-login_uri="http://ponto.pisandelli.com/" data-nonce="" data-auto_select="true" data-itp_support="true"
+          data-login_uri="https://ponto.pisandelli.com/" data-nonce="" data-auto_select="true" data-itp_support="true"
           data-use_fedcm_for_prompt="true">
         </div>
 
