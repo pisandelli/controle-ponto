@@ -1,9 +1,9 @@
 <script lang='ts' setup>
 /**
-* Index Page.
-* @name 'PageIndex'
-* @version 1.0.0
-*/
+ * Index Page.
+ * @name 'PageIndex'
+ * @version 1.0.0
+ */
 import { useDayLogsStore } from '~/store/dayLogs'
 import TextColor from 'utilities/TextColor.module.styl'
 
@@ -41,8 +41,9 @@ const timer = setTimer()
  * the total pause duration is added to the dayLogStore.
  */
 function registrarPausa() {
+  const currentTime = dayjs().unix()
   if (!dayLogStore.log.pausaInicio) {
-    dayLogStore.log.pausaInicio = dayjs().unix()
+    dayLogStore.log.pausaInicio = currentTime
   }
   if (!pausa.value) {
     loadingLabel.value = 'Iniciando Pausa...'
@@ -52,7 +53,7 @@ function registrarPausa() {
     modalAlert()
   } else {
     loadingLabel.value = 'Finalizando Pausa...'
-    dayLogStore.log.pausaFim = dayjs().unix()
+    dayLogStore.log.pausaFim = currentTime
     timer.stop()
     pausa.value = false
     dayLogStore.logTime('pausaFim')
@@ -129,16 +130,13 @@ const greetings = {
 }
 
 const getGreetings = computed(() => {
-  if (!dayLogStore.log.startTime) {
-    return greetings.startTime
-  } else if (pausa.value) {
-    return greetings.pausa
-  } else if (dayLogStore.log.endTime) {
-    return greetings.descanso
-  } else {
-    return greetings.endTime
-  }
+  const { log } = dayLogStore
+  if (!log.startTime) return greetings.startTime
+  if (pausa.value) return greetings.pausa
+  if (log.endTime) return greetings.descanso
+  return greetings.endTime
 })
+
 </script>
 
 <template lang="pug">

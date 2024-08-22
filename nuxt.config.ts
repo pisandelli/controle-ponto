@@ -147,9 +147,9 @@ export default defineNuxtConfig({
       {
         url: process.env.SUPABASE_URL,
         key: process.env.SUPABASE_KEY,
-        // redirect: false,
         redirectOptions: {
-          cookieRedirect: true
+          login: '/auth/signin',
+          callback: '/auth/confirm'
         }
       }
     ]
@@ -157,6 +157,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
+      BASE_URL: process.env.BASE_URL || 'http://localhost:3000',
       API: '/api',
       API_TIMELOG: {
         POST_LOG: 'postLog',
@@ -169,5 +170,7 @@ export default defineNuxtConfig({
 
   devtools: {
     enabled: true
-  }
+  },
+
+  compatibilityDate: '2024-08-19'
 })
