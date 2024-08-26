@@ -10,27 +10,35 @@ export default defineEventHandler(async (event) => {
   const prisma = new PrismaClient()
   const body = await readBody(event)
   try {
-    const day = body.day
-      ? (body.day as string).replace(/-/g, '/')
-      : formatToday()
+    //CHECKLATER:  Check why this body.day is comming here??
+    // const day = body.day
+    //   ? (body.day as string).replace(/-/g, '/')
+    //   : formatToday()
     const existingEntry = await prisma.timeLogs.findFirst({
       where: {
-        userId: body.userId,
-        day
+        day: formatToday(),
+        email: body.userEmail
       }
     })
 
     if (!existingEntry) {
-      const response = await prisma.timeLogs.upsert({
-        where: {
-          id: body.userId,
-          day: formatToday()
-        },
-        update: {},
-        create: {
+      // const response = await prisma.timeLogs.upsert({
+      //   where: {
+      //     email: body.userEmail,
+      //     day: formatToday()
+      //   },
+      //   update: {},
+      //   create: {
+      //     startTime: body.startTime,
+      //     day: formatToday(),
+      //     email: body.userEmail
+      //   }
+      // })
+      const response = await prisma.timeLogs.create({
+        data: {
           startTime: body.startTime,
           day: formatToday(),
-          userId: body.userId
+          email: body.userEmail
         }
       })
       return response

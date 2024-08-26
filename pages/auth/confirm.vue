@@ -9,6 +9,7 @@ watch(user, () => {
 
 </script>
 
-<template>
-  <div>Waiting for login...</div>
+<template lang='pug'>
+ModalL
+  Loading(label='Validando usuário...')
 </template>

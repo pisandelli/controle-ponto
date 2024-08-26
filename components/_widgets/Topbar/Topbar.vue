@@ -13,10 +13,12 @@
     ClusterL
       Icon.icon(name='feather:help-circle')
       Icon.icon(name='feather:settings')
+      Greetings
 
 </template>
 
 <style lang="stylus" scoped>
+.greetings
 .logo
   max-block-size: 2.5rem
 

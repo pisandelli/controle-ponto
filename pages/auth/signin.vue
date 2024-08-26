@@ -3,6 +3,12 @@ const user = useSupabaseUser()
 const { auth } = useSupabaseClient()
 const redirectTo = `${useRuntimeConfig().public.BASE_URL}/auth/confirm`
 
+/**
+ * Handles the sign-in process with Google OAuth.
+ * This function is called when the user clicks the "Sign in with Google" button.
+ * It uses the Supabase client to initiate the Google OAuth flow, and redirects the user to the specified redirect URI.
+ * If an error occurs during the sign-in process, it throws a new error with the error message.
+ */
 const handleSignInWithGoogle = async () => {
   const { error } = await auth.signInWithOAuth({
     provider: 'google',
@@ -17,9 +23,13 @@ const handleSignInWithGoogle = async () => {
   }
 }
 
+/**
+ * Watches for changes to the current user and redirects to the home page if a user is logged in.
+ * This function is executed whenever the `user` reactive variable changes.
+ */
 watchEffect(async () => {
   if (user.value) {
-    const { error } = await auth.getUser() //getUser
+    const { error } = await auth.getUser()
     if (error) {
       throw createError({
         ...error,

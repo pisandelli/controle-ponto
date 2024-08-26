@@ -7,6 +7,10 @@
 import { useDayLogsStore } from '~/store/dayLogs'
 import TextColor from 'utilities/TextColor.module.styl'
 
+definePageMeta({
+  middleware: ['user']
+})
+
 const dayjs = useDayjs()
 const time = currentTime()
 const dayLogStore = useDayLogsStore()
@@ -19,7 +23,7 @@ const loadingLabel = ref('Carregando...')
  * This is called when the component is mounted, to ensure any previous 
  * pauses are properly restored.
  */
-onMounted(() => {
+onMounted(async () => {
   if (!dayLogStore.log.pauseDuration && dayLogStore.log.pausaInicio) {
     timer.time.value = dayjs().diff(
       dayjs.unix(dayLogStore.log.pausaInicio),
@@ -112,9 +116,9 @@ function registrarEntrada() {
  */
 async function registrarSaida() {
   loadingLabel.value = 'Registrando saída...'
-  const register = await registerTime('endTime')
-  const soma = await dayLogStore.setSomaSaida()
-  Promise.all([register, soma])
+  await registerTime('endTime')
+  // const soma = await dayLogStore.setSomaSaida()
+  // Promise.all([register, soma])
 }
 
 
