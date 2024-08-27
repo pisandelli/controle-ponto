@@ -4,7 +4,7 @@ const redirectTo = `${useRuntimeConfig().public.BASE_URL}/`
 console.log(redirectTo)
 watch(user, () => {
   if (user.value) {
-    return navigateTo(redirectTo)
+    return navigateTo(redirectTo, { external: true })
   }
 }, { immediate: true })
 
