@@ -52,7 +52,7 @@ StackL(compact)
     h1.title Login 
     p.sub-title Faça seu login com sua conta da Pisandelli
   div#g_id_onload(data-client_id="722253408739-m75kgrmghav5lk7o2gqdqusvhu530e9r.apps.googleusercontent.com"
-    data-context="signin" data-ux_mode="redirect" :data-login_uri="redirectTo" data-auto_prompt="false")
+    data-context="signin" data-ux_mode="popup" :data-login_uri="redirectTo" data-auto_prompt="false")
 
   div.g_id_signin(data-type="standard" data-shape="rectangular" data-theme="filled_blue"
     data-text="signin" data-size="large" data-logo_alignment="left" data-width="250"
