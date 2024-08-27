@@ -12,7 +12,7 @@ defineProps<{
 
 <template lang="pug">
 .avatar(v-if='path')
-  NuxtImg(:src='path')
+  NuxtImg(:src='path' alt='Avatar')
 </template>
 
 <style lang="stylus" scoped>
