@@ -16,4 +16,7 @@
     "intlify",
     "TIMELOG"
   ],
+  "conventionalCommits.scopes": [
+    "bun"
+  ],
 }
