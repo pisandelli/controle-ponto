@@ -1,9 +1,9 @@
 <script setup lang="ts">
 const user = useSupabaseUser()
-
+const redirectTo = `${useRuntimeConfig().public.BASE_URL}/`
 watch(user, () => {
   if (user.value) {
-    return navigateTo('/')
+    return navigateTo(redirectTo)
   }
 }, { immediate: true })
 
