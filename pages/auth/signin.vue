@@ -2,7 +2,7 @@
 const user = useSupabaseUser()
 const { auth } = useSupabaseClient()
 const redirectTo = `${useRuntimeConfig().public.BASE_URL}/auth/confirm`
-console.log(redirectTo)
+
 /**
  * Handles the sign-in process with Google OAuth.
  * This function is called when the user clicks the "Sign in with Google" button.
