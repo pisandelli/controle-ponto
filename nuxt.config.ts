@@ -5,6 +5,12 @@ export default defineNuxtConfig({
       htmlAttrs: {
         lang: 'pt-br'
       },
+      meta: [
+        {
+          name: 'referrer',
+          content: 'origin'
+        }
+      ],
       title: 'Controle de Ponto',
       script: [{ src: 'https://accounts.google.com/gsi/client', async: true }]
     }
