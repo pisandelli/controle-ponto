@@ -10,13 +10,13 @@ export default defineEventHandler(async (event) => {
   const query = getQuery(event)
   try {
     if (query.userId) {
-      const userId = +query.userId
+      const email = query.email as string
       const day = query.day
         ? (query.day as string).replace(/-/g, '/')
         : formatToday()
       const response = await prisma.timeLogs.findFirst({
         where: {
-          userId,
+          email,
           day
         }
       })

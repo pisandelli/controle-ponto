@@ -4,13 +4,13 @@
  * @param startTime - The start time to be logged, in milliseconds since the Unix epoch.
  * @returns `true` if the start time was successfully logged, or throws an error if there was a problem.
  */
-export default async (startTime: number, userId: number) => {
+export default async (startTime: number, userEmail: string) => {
   const config = useRuntimeConfig().public
 
   await $fetch(`${config.API}/${config.API_TIMELOG.START_TIME}`, {
     method: 'post',
     body: {
-      userId,
+      userEmail,
       startTime
     }
   }).catch((error: any) => {

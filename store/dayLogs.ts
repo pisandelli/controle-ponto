@@ -1,16 +1,17 @@
 import type { DayLog } from '~/Types/dayLog'
+import { useUserStore } from './user'
 import checkLog from '~/services/checkLog'
 import postLog from '~/services/postLog'
 import logStartTime from '~/services/logStartTime'
 export const useDayLogsStore = defineStore('dayLogs', () => {
-  // TODO: Get UserId from Supabase
-  const userId = ref(1)
+  const userEmail = useUserStore().user?.email
   const dayjs = useDayjs()
   const active = ref(false)
   const firstLog = ref(true)
   const isLoading = ref(true)
   const log = reactive<DayLog>({
     id: null,
+    email: null,
     startTime: null,
     pauseDuration: 0,
     endTime: null,
@@ -31,10 +32,12 @@ export const useDayLogsStore = defineStore('dayLogs', () => {
    * and setting the `active` and `isLoading` flags accordingly.
    */
   async function __updateTimeLog() {
-    const hasLog = await checkLog(userId.value)
+    if (!userEmail) return
+    const hasLog = await checkLog(userEmail)
     if (hasLog) {
       firstLog.value = false
       log.id = hasLog.id
+      log.email = hasLog.email
       log.startTime = hasLog.startTime
       log.endTime = hasLog.endTime ?? null
       log.pausaInicio = hasLog.pausaInicio ?? null
@@ -59,17 +62,19 @@ export const useDayLogsStore = defineStore('dayLogs', () => {
    * @param obs - An optional string observation to include in the log
    * @returns {Promise<void>}
    */
-  async function logTime(key: string, obs?: string) {
+  async function logTime(key: string, obs?: string): Promise<void> {
+    if (!userEmail) return
     isLoading.value = true
 
     const now = dayjs().unix()
     if (firstLog.value) {
-      await logStartTime(now, userId.value)
+      await logStartTime(now, userEmail)
       firstLog.value = false
     } else {
-      if (log.id) await postLog({ [key]: now }, log.id)
+      if (log.id) await postLog(log.id, { [key]: now }, log.email as string)
     }
     await __updateTimeLog()
+    await setSomaSaida()
     active.value = true
   }
 
@@ -86,8 +91,14 @@ export const useDayLogsStore = defineStore('dayLogs', () => {
         .unix(log.pausaFim)
         .diff(dayjs.unix(log.pausaInicio), 's')
 
-      if (log.id) await postLog({ pauseDuration: log.pauseDuration }, log.id)
-      __updateTimeLog()
+      if (log.id) {
+        await postLog(
+          log.id,
+          { pauseDuration: log.pauseDuration },
+          log.email as string
+        )
+        await __updateTimeLog()
+      }
     }
   }
 
@@ -103,15 +114,21 @@ export const useDayLogsStore = defineStore('dayLogs', () => {
       const startTime = dayjs.unix(log.startTime)
       const endTime = dayjs.unix(log.endTime)
       const diffInOut = dayjs(endTime).diff(dayjs(startTime), 's')
-      const durationInOut = dayjs.duration(diffInOut, 's')
-      log.totalDuration = durationInOut
-        .subtract(dayjs.duration(log.pauseDuration, 's') ?? 0)
-        .seconds()
-      if (log.id) await postLog({ totalDuration: log.totalDuration }, log.id)
-      __updateTimeLog()
+
+      log.totalDuration = dayjs
+        .duration(diffInOut - log.pauseDuration, 's')
+        .asSeconds()
+
+      if (log.id) {
+        await postLog(
+          log.id,
+          { totalDuration: log.totalDuration },
+          log.email as string
+        )
+        await __updateTimeLog()
+      }
     }
   }
-
   return {
     active,
     log,

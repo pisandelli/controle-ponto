@@ -9,7 +9,7 @@
  * @throws {Error} If there was an error fetching the log data.
  */
 interface GetLogOptions {
-  userId: number
+  userEmail: string
   key: string
   day?: string
 }
@@ -17,7 +17,7 @@ export default async (options: GetLogOptions) => {
   const config = useRuntimeConfig().public
   const { data, error } = await useAsyncData('getStartTime', () => {
     return $fetch(
-      `${config.API}/${config.API_TIMELOG.GET_LOG}?userId=${options.userId}&timeKey=${options.key}&day=${options.day ?? formatToday()}`
+      `${config.API}/${config.API_TIMELOG.GET_LOG}?userId=${options.userEmail}&timeKey=${options.key}&day=${options.day ?? formatToday()}`
     )
   })
   if (error.value) {

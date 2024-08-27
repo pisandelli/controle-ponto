@@ -14,6 +14,7 @@ export default defineEventHandler(async (event) => {
     await prisma.timeLogs.update({
       where: {
         id: body.id,
+        email: body.email,
         day: formatToday()
       },
       data
