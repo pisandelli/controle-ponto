@@ -1,6 +1,5 @@
 <script setup lang="ts">
 const user = useSupabaseUser()
-console.log(redirectTo)
 watch(user, () => {
   if (user.value) {
     return navigateTo('/')
