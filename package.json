@@ -44,7 +44,7 @@
     "@nuxtjs/html-validator": "^1.8.2",
     "@nuxtjs/robots": "^3.0.0",
     "@pinia/nuxt": "^0.5.4",
-    "@supabase/gotrue-js": "^2.64.4",
+    "@supabase/gotrue-js": "^2.65.0",
     "@vueuse/nuxt": "^11.0.3",
     "nuxt-icon": "^0.6.10"
   }
