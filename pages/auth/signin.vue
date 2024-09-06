@@ -23,6 +23,7 @@ const handleSignInWithGoogle = async () => {
   }
 }
 
+
 /**
  * Watches for changes to the current user and redirects to the home page if a user is logged in.
  * This function is executed whenever the `user` reactive variable changes.
@@ -51,11 +52,12 @@ StackL(compact)
   StackL(squeezed)
     h1.title Login 
     p.sub-title Faça seu login com sua conta da Pisandelli
-  div#g_id_onload(data-client_id="722253408739-m75kgrmghav5lk7o2gqdqusvhu530e9r.apps.googleusercontent.com"
-    data-context="signin" data-ux_mode="redirect" :data-login_uri="redirectTo" data-auto_prompt="false")
+  div#g_id_onload(data-client_id="722253408739-tnljep2ajut3navih837asuvr8024ad0.apps.googleusercontent.com"
+    data-context="signin" data-ux_mode="redirect" :data-login_uri="redirectTo"
+    data-nonce="" data-auto_prompt="false" data-use_fedcm_for_prompt="true" :data-callback="handleSignInWithGoogle")
 
   div.g_id_signin(data-type="standard" data-shape="rectangular" data-theme="filled_blue"
-    data-text="signin" data-size="large" data-logo_alignment="left" data-width="250"
+    data-text="signin_with" data-size="large" data-logo_alignment="left" data-width="250"
     @click="handleSignInWithGoogle")
 </template>
 
