@@ -39,6 +39,24 @@ const columns = [
     duration: true
   }
 ]
+
+/**
+ * Checks if the given record has an observation for the specified key.
+ *
+ * @param record - The record object containing the observation data.
+ * @param key - The key to check for an observation.
+ * @returns `true` if an observation exists for the given key, `false` otherwise.
+ */
+function checkObs(record: Record<string, any>, key: string) {
+  switch (key) {
+    case 'startTime':
+      return record.obsStart || false
+    case 'endTime':
+      return record.obsEnd || false
+    default:
+      return false
+  }
+}
 </script>
 
 <template lang="pug">
@@ -49,10 +67,11 @@ StackL.log(compact)
       ClusterL.pop
         p(v-if="!column.duration && text !== null") {{ $dayjs.unix(text).format('HH:mm:ss') }}
         p(v-else-if="column.duration && text !== null") {{ $dayjs.duration(text, 's').format('HH:mm:ss') }}
-        template(v-if="record.obs[`${column.key}`]")
+        template(v-if="checkObs(record, `${column.key}`)")
           APopover(title='Observações' :overlayStyle="{ maxInlineSize: '300px' }" :locale="{ emptyText: 'Sem registros' }")
             template(#content)
-              p {{ record.obs[`${column.key}`] }}
+              p(v-if="column.key === 'startTime'") {{ record.obsStart }}
+              p(v-if="column.key === 'endTime'") {{ record.obsEnd }}
             Icon.icon(name='feather:info' size='1em' color='var(--color-primary)')
 
 </template>

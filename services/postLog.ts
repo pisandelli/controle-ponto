@@ -6,7 +6,7 @@
  * @returns `true` if the log data was successfully sent, otherwise throws an error.
  */
 import type { LogData } from '~/Types/LogData'
-export default async (id: number, data: LogData, email: string) => {
+export default async (id: number, email: string, data: LogData) => {
   const config = useRuntimeConfig().public
   await $fetch(`${config.API}/${config.API_TIMELOG.POST_LOG}`, {
     method: 'post',

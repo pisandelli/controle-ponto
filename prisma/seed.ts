@@ -3,11 +3,26 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 async function seed() {
-  const pedro = await prisma.users.create({
+  await prisma.users.create({
     data: {
       userId: '115452755645875412905',
       email: 'pedro@pisandelli.com',
       name: 'Pedro Pisandelli'
+    }
+  })
+
+  await prisma.timeLogs.create({
+    data: {
+      email: 'pedro@pisandelli.com',
+      day: '01/09/2024',
+      startTime: 1725177600,
+      endTime: 1725210000,
+      pausaInicio: 1725181200,
+      pausaFim: 1725183000,
+      pauseDuration: 1800,
+      totalDuration: 27000,
+      obsStart: 'Hoje cheguei no horário certo',
+      obsEnd: 'Hoje saí do trabalho um pouco adiantado'
     }
   })
 }
