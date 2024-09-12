@@ -5,14 +5,7 @@ export default defineNuxtConfig({
       htmlAttrs: {
         lang: 'pt-br'
       },
-      meta: [
-        {
-          name: 'referrer',
-          content: 'origin'
-        }
-      ],
-      title: 'Controle de Ponto',
-      script: [{ src: 'https://accounts.google.com/gsi/client', async: true }]
+      title: 'Controle de Ponto'
     }
   },
 
@@ -149,18 +142,25 @@ export default defineNuxtConfig({
       }
     ],
     [
-      '@nuxtjs/supabase',
+      'nuxt-vuefire',
       {
-        url: process.env.SUPABASE_URL,
-        key: process.env.SUPABASE_KEY,
-        redirectOptions: {
-          login: '/auth/signin',
-          callback: '/auth/confirm'
+        // Add custom options for vuefire
+        // https://vuefire.vuejs.org/guide/nuxt.html
+        auth: {
+          enabled: true
+        },
+        config: {
+          apiKey: 'AIzaSyALG6Fw3VKBFwjADYMgs9CBKPnRIZ4bX0Q',
+          authDomain: 'controle-ponto-dfb5e.firebaseapp.com',
+          projectId: 'controle-ponto-dfb5e',
+          storageBucket: 'controle-ponto-dfb5e.appspot.com',
+          messagingSenderId: '292295606902',
+          appId: '1:292295606902:web:124662e5f2395911659557'
         }
       }
     ]
   ],
-
+  ssr: false,
   runtimeConfig: {
     public: {
       BASE_URL: process.env.BASE_URL || 'http://localhost:3000',

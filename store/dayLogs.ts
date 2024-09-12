@@ -18,11 +18,8 @@ export const useDayLogsStore = defineStore('dayLogs', () => {
     pausaInicio: null,
     pausaFim: null,
     totalDuration: 0,
-    obs: {
-      startTime: null,
-      pausa: null,
-      endTime: null
-    }
+    obsStart: null,
+    obsEnd: null
   })
 
   /**
@@ -44,6 +41,8 @@ export const useDayLogsStore = defineStore('dayLogs', () => {
       log.pausaFim = hasLog.pausaFim ?? null
       log.pauseDuration = hasLog.pauseDuration
       log.totalDuration = hasLog.totalDuration
+      log.obsStart = hasLog.obsStart ?? null
+      log.obsEnd = hasLog.obsEnd ?? null
       active.value = true
     }
     isLoading.value = false
@@ -52,26 +51,34 @@ export const useDayLogsStore = defineStore('dayLogs', () => {
   __updateTimeLog()
 
   /**
-   * Updates the time log data based on the user's activity.
-   * This function is responsible for logging the start time of the first log,
-   * or updating the existing log with the current time for the specified key
-   * (e.g. 'startTime', 'endTime'). It also updates the `active` and `isLoading`
-   * flags accordingly.
+   * Logs the user's time activity, including start time, end time, and any observation data.
+   * This function is responsible for handling the user's time logging, including creating a new
+   * log entry if it's the user's first time logging, or updating an existing log entry with the
+   * latest time and observation data.
    *
-   * @param key - The key to update in the log object (e.g. 'startTime', 'endTime')
-   * @param obs - An optional string observation to include in the log
-   * @returns {Promise<void>}
+   * @param key - The key to update in the log object, either 'endTime' or 'obsStart'/'obsEnd'.
+   * @param obsData - Optional observation data to include in the log.
+   * @returns A Promise that resolves when the log has been updated.
    */
-  async function logTime(key: string, obs?: string): Promise<void> {
+  async function logTime(key: string, obsData?: string): Promise<void> {
     if (!userEmail) return
     isLoading.value = true
 
     const now = dayjs().unix()
     if (firstLog.value) {
-      await logStartTime(now, userEmail)
+      await logStartTime(now, userEmail, obsData)
       firstLog.value = false
     } else {
-      if (log.id) await postLog(log.id, { [key]: now }, log.email as string)
+      if (log.id) {
+        let obsKey = 'obsStart' //default value
+        if (key === 'endTime') obsKey = 'obsEnd'
+        const data = {
+          [key]: now,
+          [obsKey]: obsData
+        }
+
+        await postLog(log.id, `${log.email}`, data)
+      }
     }
     await __updateTimeLog()
     await setSomaSaida()
@@ -92,11 +99,9 @@ export const useDayLogsStore = defineStore('dayLogs', () => {
         .diff(dayjs.unix(log.pausaInicio), 's')
 
       if (log.id) {
-        await postLog(
-          log.id,
-          { pauseDuration: log.pauseDuration },
-          log.email as string
-        )
+        await postLog(log.id, `${log.email}`, {
+          pauseDuration: log.pauseDuration
+        })
         await __updateTimeLog()
       }
     }
@@ -120,11 +125,9 @@ export const useDayLogsStore = defineStore('dayLogs', () => {
         .asSeconds()
 
       if (log.id) {
-        await postLog(
-          log.id,
-          { totalDuration: log.totalDuration },
-          log.email as string
-        )
+        await postLog(log.id, `${log.email}`, {
+          totalDuration: log.totalDuration
+        })
         await __updateTimeLog()
       }
     }

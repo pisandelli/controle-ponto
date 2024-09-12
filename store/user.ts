@@ -4,11 +4,11 @@ export const useUserStore = defineStore('user', () => {
 
   async function setUser(userData: any) {
     user.value = {
-      username: userData.value.user_metadata.name,
-      email: userData.value.user_metadata.email,
-      avatar: userData.value.user_metadata.avatar_url,
-      createdAt: userData.value.created_at,
-      updatedAt: userData.value.updated_at
+      username: userData.displayName,
+      email: userData.email,
+      avatar: userData.photoURL,
+      createdAt: userData.createdAt,
+      updatedAt: userData.lastLoginAt
     }
   }
 

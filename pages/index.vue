@@ -33,7 +33,6 @@ onMounted(async () => {
   }
 })
 
-
 const pausa = ref(false)
 const textPausa = computed(() => pausa.value ? 'Terminar Pausa' : 'Iniciar Pausa')
 const timer = setTimer()
@@ -87,23 +86,25 @@ const modalAlert = () => {
 }
 
 /**
- * Logs the current time value to the dayLogStore and clears the obs.value.
- * @param {string} key - The key to use when logging the time in the dayLogStore.
+ * Logs the current time to the dayLogStore under the specified key.
+ * @param key - The key to use when logging the time, e.g. 'startTime' or 'endTime'.
+ * @param obsData - An optional observation value to associate with the logged time.
  */
-async function registerTime(key: string) {
-  await dayLogStore.logTime(key, obs.value)
-  obs.value = ''
+async function registerTime(key: string, obsData?: string) {
+  await dayLogStore.logTime(key, obsData)
 }
 
 /**
- * Registers the user's entry time for the day.
- * This function is called when the user indicates they have arrived for the day.
+ * Registers the user's start time for the day.
+ * This function is called when the user indicates they are starting their workday.
  * It sets the `loadingLabel` to indicate the action being performed,
- * and then calls the `registerTime` function to log the start time to the `dayLogStore`.
+ * calls the `registerTime` function to log the start time to the `dayLogStore`,
+ * and then clears the `obs` value.
  */
-function registrarEntrada() {
+async function registrarEntrada() {
   loadingLabel.value = 'Registrando entrada...'
-  registerTime('startTime')
+  await registerTime('startTime', obs.value)
+  obs.value = ''
 }
 
 
@@ -116,9 +117,8 @@ function registrarEntrada() {
  */
 async function registrarSaida() {
   loadingLabel.value = 'Registrando saída...'
-  await registerTime('endTime')
-  // const soma = await dayLogStore.setSomaSaida()
-  // Promise.all([register, soma])
+  await registerTime('endTime', obs.value)
+  obs.value = ''
 }
 
 
@@ -140,7 +140,6 @@ const getGreetings = computed(() => {
   if (log.endTime) return greetings.descanso
   return greetings.endTime
 })
-
 </script>
 
 <template lang="pug">

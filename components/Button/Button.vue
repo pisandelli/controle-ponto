@@ -28,6 +28,7 @@ $variants = primary accent success danger warning info
   color: var(--color-neutral)
   letter-spacing: 0.03125rem
   padding: .5rem 1rem
+  inline-size: max-content
   border-radius: var(--border-radius)
   text-decoration: none
   border: 0
@@ -44,6 +45,12 @@ $variants = primary accent success danger warning info
     color: var(--color-gray-50)
     pointer-events: none
     cursor: not-allowed
+  
+  &[outline]:not([outline='false'])
+    background-color: transparent
+    border: 1px solid var(--color-primary)
+    color: var(--color-primary)
+
 .loader
   animation: rotate 2s infinite linear
 

@@ -1,19 +1,16 @@
 /**
- * Handles the POST request to the /api/startTime endpoint.
- * This function creates a new time log entry for the given user and day, or throws an error if an entry for the current day already exists.
+ * Handles the POST request for creating a new time log entry.
+ *
+ * This function checks if there is an existing time log entry for the current day and the given user email. If no entry exists, it creates a new time log entry with the provided start time, day, user email, and observation start time. If an entry already exists, it throws an error.
  *
  * @param event - The Nuxt.js event object containing the request body.
- * @returns The created time log entry, or throws an error if an entry for the current day already exists.
+ * @returns The created time log entry, or throws an error if an entry already exists for the day.
  */
 import { PrismaClient } from '@prisma/client'
 export default defineEventHandler(async (event) => {
   const prisma = new PrismaClient()
   const body = await readBody(event)
   try {
-    //CHECKLATER:  Check why this body.day is comming here??
-    // const day = body.day
-    //   ? (body.day as string).replace(/-/g, '/')
-    //   : formatToday()
     const existingEntry = await prisma.timeLogs.findFirst({
       where: {
         day: formatToday(),
@@ -22,23 +19,12 @@ export default defineEventHandler(async (event) => {
     })
 
     if (!existingEntry) {
-      // const response = await prisma.timeLogs.upsert({
-      //   where: {
-      //     email: body.userEmail,
-      //     day: formatToday()
-      //   },
-      //   update: {},
-      //   create: {
-      //     startTime: body.startTime,
-      //     day: formatToday(),
-      //     email: body.userEmail
-      //   }
-      // })
       const response = await prisma.timeLogs.create({
         data: {
           startTime: body.startTime,
           day: formatToday(),
-          email: body.userEmail
+          email: body.userEmail,
+          obsStart: body.obsStart
         }
       })
       return response

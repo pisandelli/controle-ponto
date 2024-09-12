@@ -4,6 +4,12 @@
 * @name 'WTopbar'
 * @version 1.0.0
 */
+const auth = useFirebaseAuth()!
+
+function signOut() {
+  auth.signOut()
+  return navigateTo('/auth/signin')
+}
 </script>
 
 <template lang="pug">
@@ -11,9 +17,10 @@
   ClusterL.container(between)
     Logo.logo
     ClusterL
-      Icon.icon(name='feather:help-circle')
-      Icon.icon(name='feather:settings')
+      //- Icon.icon(name='feather:help-circle')
+      //- Icon.icon(name='feather:settings')
       Greetings
+      Icon.icon(name='feather:log-out' @click='signOut')
 
 </template>
 
@@ -30,4 +37,5 @@
 
 .icon
   color: var(--color-secondary)
+  cursor: pointer
 </style>

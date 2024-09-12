@@ -8,10 +8,6 @@ export type DayLog = {
   totalDuration: number
   pausaInicio: number | null
   pausaFim: number | null
-  obs: {
-    [key: string]: string | null
-    startTime: string | null
-    pausa: string | null
-    endTime: string | null
-  }
+  obsStart: string | null
+  obsEnd: string | null
 }
