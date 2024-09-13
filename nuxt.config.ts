@@ -95,7 +95,7 @@ export default defineNuxtConfig({
         // add nuxt-image config here
         // https://v1.image.nuxtjs.org/configuration
         dir: 'assets/images/',
-        provider: 'ipx'
+        provider: 'vercel'
       }
     ],
     [
