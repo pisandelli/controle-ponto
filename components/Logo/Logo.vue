@@ -7,7 +7,7 @@
 </script>
 
 <template lang="pug">
-NuxtImg.logo(src='logo.svg' alt='Pisandelli logo')
+NuxtImg.logo(src='images/logo.svg' alt='Pisandelli logo')
 </template>
 
 <style lang="stylus" scoped></style>
