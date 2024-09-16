@@ -45,7 +45,7 @@
     "@nuxtjs/html-validator": "^1.8.2",
     "@nuxtjs/robots": "^3.0.0",
     "@pinia/nuxt": "^0.5.4",
-    "@vueuse/nuxt": "^11.0.3",
+    "@vueuse/nuxt": "^11.1.0",
     "firebase": "^10.13.1",
     "firebase-admin": "^12.5.0",
     "firebase-functions": "^5.1.1",
