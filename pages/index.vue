@@ -24,7 +24,8 @@ const loadingLabel = ref('Carregando...')
  * pauses are properly restored.
  */
 onMounted(async () => {
-  if (!dayLogStore.log.pauseDuration && dayLogStore.log.pausaInicio) {
+  await dayLogStore.updateTimeLog()
+  if (dayLogStore.log.pausaInicio) {
     timer.time.value = dayjs().diff(
       dayjs.unix(dayLogStore.log.pausaInicio),
       's'

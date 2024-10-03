@@ -28,7 +28,7 @@ export const useDayLogsStore = defineStore('dayLogs', () => {
    * log data, updating the log object with the latest information,
    * and setting the `active` and `isLoading` flags accordingly.
    */
-  async function __updateTimeLog() {
+  async function updateTimeLog() {
     if (!userEmail) return
     const hasLog = await checkLog(userEmail)
     if (hasLog) {
@@ -48,7 +48,7 @@ export const useDayLogsStore = defineStore('dayLogs', () => {
     isLoading.value = false
   }
 
-  __updateTimeLog()
+  updateTimeLog()
 
   /**
    * Logs the user's time activity, including start time, end time, and any observation data.
@@ -64,7 +64,7 @@ export const useDayLogsStore = defineStore('dayLogs', () => {
     if (!userEmail) return
     isLoading.value = true
 
-    const now = dayjs().unix()
+    let now = dayjs().unix()
     if (firstLog.value) {
       await logStartTime(now, userEmail, obsData)
       firstLog.value = false
@@ -72,6 +72,7 @@ export const useDayLogsStore = defineStore('dayLogs', () => {
       if (log.id) {
         let obsKey = 'obsStart' //default value
         if (key === 'endTime') obsKey = 'obsEnd'
+        if (key === 'pausaInicio') now = log.pausaInicio ?? now
         const data = {
           [key]: now,
           [obsKey]: obsData
@@ -80,7 +81,7 @@ export const useDayLogsStore = defineStore('dayLogs', () => {
         await postLog(log.id, `${log.email}`, data)
       }
     }
-    await __updateTimeLog()
+    await updateTimeLog()
     await setSomaSaida()
     active.value = true
   }
@@ -100,9 +101,10 @@ export const useDayLogsStore = defineStore('dayLogs', () => {
 
       if (log.id) {
         await postLog(log.id, `${log.email}`, {
-          pauseDuration: log.pauseDuration
+          pauseDuration: log.pauseDuration,
+          pausaInicio: null
         })
-        await __updateTimeLog()
+        await updateTimeLog()
       }
     }
   }
@@ -128,12 +130,13 @@ export const useDayLogsStore = defineStore('dayLogs', () => {
         await postLog(log.id, `${log.email}`, {
           totalDuration: log.totalDuration
         })
-        await __updateTimeLog()
+        await updateTimeLog()
       }
     }
   }
   return {
     active,
+    updateTimeLog,
     log,
     logTime,
     setSomaPausa,
