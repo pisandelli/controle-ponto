@@ -13,7 +13,16 @@ model Users {
   id       Int      @id @default(autoincrement())
   email    String   @unique
   name     String?
+  group    UserGroups @relation(fields: [groupId], references: [id])
+  groupId Int
 }
+
+model UserGroups {
+  id       Int      @id @default(autoincrement())
+  name     String
+  Users Users[]
+}
+
 model TimeLogs {
   id            Int    @id @default(autoincrement())
   email         String
