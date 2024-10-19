@@ -120,13 +120,6 @@ export default defineNuxtConfig({
       }
     ],
     [
-      '@morev/vue-transitions/nuxt',
-      {
-        // Add custom options for vueTransitions
-        // https://github.com/MorevM/vue-transitions#usage-with-nuxt
-      }
-    ],
-    [
       '@pinia/nuxt',
       {
         autoImports: ['defineStore', 'acceptHMRUpdate']
