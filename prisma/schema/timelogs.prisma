@@ -1,0 +1,13 @@
+model TimeLogs {
+  id            Int    @id @default(autoincrement())
+  email         String
+  day           String
+  startTime     Int
+  endTime       Int?
+  pausaInicio   Int?
+  pausaFim      Int?
+  pauseDuration Int?
+  totalDuration Int?
+  obsStart      String?
+  obsEnd        String?
+}
