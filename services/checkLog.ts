@@ -7,10 +7,10 @@
  * @returns The check log data for the specified user and day.
  * @throws {Error} If there is an error fetching the check log data.
  */
-export default async (email: string, day?: string) => {
+export default async (email: string, today?: string) => {
   const config = useRuntimeConfig().public
   const data = $fetch(
-    `${config.API}/${config.API_TIMELOG.CHECK_LOG}?email=${email}&day=${day ?? formatToday()}`
+    `${config.API}/${config.API_TIMELOG.CHECK_LOG}?email=${email}&today=${today ?? formatToday()}`
   ).catch((error: any) => {
     throw createError({
       ...error.value,
