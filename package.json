@@ -21,7 +21,7 @@
     "@ant-design-vue/nuxt": "^1.4.4",
     "@nuxt/image": "1.8.1",
     "@nuxtjs/eslint-config-typescript": "^12.1.0",
-    "@prisma/client": "^5.20.0",
+    "@prisma/client": "^5.21.1",
     "@vue/language-plugin-pug": "^2.1.6",
     "cz-conventional-changelog": "^3.3.0",
     "dayjs-nuxt": "^2.1.11",
