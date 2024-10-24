@@ -17,6 +17,7 @@
     "TIMELOG"
   ],
   "conventionalCommits.scopes": [
-    "bun"
+    "bun",
+    "prisma"
   ],
 }

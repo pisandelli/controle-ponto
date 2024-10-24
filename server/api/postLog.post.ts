@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
       where: {
         id: body.id,
         email: body.email,
-        day: formatToday()
+        today: formatToday()
       },
       data
     })

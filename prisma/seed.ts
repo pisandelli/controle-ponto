@@ -6,7 +6,7 @@ async function seed() {
   await prisma.timeLogs.create({
     data: {
       email: 'john@email.com',
-      day: '01/09/2024',
+      today: '01/09/2024',
       startTime: 1725177600,
       endTime: 1725210000,
       pausaInicio: 1725181200,
