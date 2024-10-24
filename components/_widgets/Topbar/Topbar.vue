@@ -20,12 +20,12 @@ function signOut() {
       //- Icon.icon(name='feather:help-circle')
       //- Icon.icon(name='feather:settings')
       Greetings
+      Icon.icon(name='feather:file' title="Relatorio")
       Icon.icon(name='feather:log-out' @click='signOut')
 
 </template>
 
 <style lang="stylus" scoped>
-.greetings
 .logo
   max-block-size: 2.5rem
 
