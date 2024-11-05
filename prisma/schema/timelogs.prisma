@@ -2,6 +2,8 @@ model TimeLogs {
   id            Int    @id @default(autoincrement())
   email         String
   today         String
+  month         String
+  year          String
   startTime     Int
   endTime       Int?
   pausaInicio   Int?

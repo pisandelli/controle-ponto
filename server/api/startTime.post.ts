@@ -24,7 +24,9 @@ export default defineEventHandler(async (event) => {
           startTime: body.startTime,
           today: formatToday(),
           email: body.userEmail,
-          obsStart: body.obsStart
+          obsStart: body.obsStart,
+          month: body.month,
+          year: body.year
         }
       })
       return response
