@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
   try {
     const existingEntry = await prisma.timeLogs.findFirst({
       where: {
-        day: formatToday(),
+        today: formatToday(),
         email: body.userEmail
       }
     })
@@ -22,9 +22,11 @@ export default defineEventHandler(async (event) => {
       const response = await prisma.timeLogs.create({
         data: {
           startTime: body.startTime,
-          day: formatToday(),
+          today: formatToday(),
           email: body.userEmail,
-          obsStart: body.obsStart
+          obsStart: body.obsStart,
+          month: body.month,
+          year: body.year
         }
       })
       return response

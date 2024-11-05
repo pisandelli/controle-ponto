@@ -7,16 +7,20 @@
 export default async (
   startTime: number,
   userEmail: string,
-  obsStart?: string
+  obsStart?: string,
+  month?: string,
+  year?: string
 ) => {
   const config = useRuntimeConfig().public
-
+  const dayjs = useDayjs()
   await $fetch(`${config.API}/${config.API_TIMELOG.START_TIME}`, {
     method: 'post',
     body: {
       userEmail,
       startTime,
-      obsStart
+      obsStart,
+      month: month ?? dayjs().format('MM'),
+      year: year ?? dayjs().format('YYYY')
     }
   }).catch((error: any) => {
     throw createError({

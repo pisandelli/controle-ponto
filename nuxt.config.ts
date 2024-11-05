@@ -120,13 +120,6 @@ export default defineNuxtConfig({
       }
     ],
     [
-      '@morev/vue-transitions/nuxt',
-      {
-        // Add custom options for vueTransitions
-        // https://github.com/MorevM/vue-transitions#usage-with-nuxt
-      }
-    ],
-    [
       '@pinia/nuxt',
       {
         autoImports: ['defineStore', 'acceptHMRUpdate']
@@ -139,7 +132,7 @@ export default defineNuxtConfig({
         // https://nuxt.com/modules/dayjs#configuration
         locales: ['pt-br'],
         defaultLocale: 'pt-br',
-        plugins: ['duration']
+        plugins: ['duration', 'customParseFormat', 'weekday']
       }
     ],
     [
@@ -170,13 +163,18 @@ export default defineNuxtConfig({
         POST_LOG: 'postLog',
         GET_LOG: 'getLog',
         START_TIME: 'startTime',
-        CHECK_LOG: 'checkLog'
+        CHECK_LOG: 'checkLog',
+        MONTH_REPORT: 'monthReport'
       }
     }
   },
 
   devtools: {
-    enabled: true
+    enabled: true,
+
+    timeline: {
+      enabled: true
+    }
   },
 
   compatibilityDate: '2024-08-19'

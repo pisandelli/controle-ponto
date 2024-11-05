@@ -11,13 +11,13 @@
 interface GetLogOptions {
   userEmail: string
   key: string
-  day?: string
+  today?: string
 }
 export default async (options: GetLogOptions) => {
   const config = useRuntimeConfig().public
   const { data, error } = await useAsyncData('getStartTime', () => {
     return $fetch(
-      `${config.API}/${config.API_TIMELOG.GET_LOG}?userId=${options.userEmail}&timeKey=${options.key}&day=${options.day ?? formatToday()}`
+      `${config.API}/${config.API_TIMELOG.GET_LOG}?userId=${options.userEmail}&timeKey=${options.key}&today=${options.today ?? formatToday()}`
     )
   })
   if (error.value) {
