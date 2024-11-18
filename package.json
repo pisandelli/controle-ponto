@@ -18,7 +18,7 @@
     }
   },
   "devDependencies": {
-    "@ant-design-vue/nuxt": "^1.4.4",
+    "@ant-design-vue/nuxt": "^1.4.6",
     "@nuxt/image": "1.8.1",
     "@nuxtjs/eslint-config-typescript": "^12.1.0",
     "@prisma/client": "^5.21.1",
